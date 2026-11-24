@@ -1,0 +1,3 @@
+detector,accuracy,precision,recall,f1
+arcade,0.8583848861641373,0.0,0.0,0.0
+arcan,0.7485991431644352,0.0,0.0,0.0

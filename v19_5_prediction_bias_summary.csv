@@ -1,0 +1,5 @@
+condition,records,ASI,NON_ASI,INVALID,validity_percent,positive_prediction_percent,prediction_entropy,dominant_class_percent
+E0-F,100,24,75,1,99.0,24.24,0.799,75.76
+E1,100,46,53,1,99.0,46.46,0.9964,53.54
+E2,100,50,49,1,99.0,50.51,0.9999,50.51
+E3,100,99,1,0,100.0,99.0,0.0808,99.0

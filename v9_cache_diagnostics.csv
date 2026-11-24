@@ -1,0 +1,6 @@
+project,detector,expected_records,cached_predictions,aligned_predictions,missing_predictions,missing_ASI,missing_Non_ASI,extra_predictions,label_mismatches,coverage_percentage,prompt_style,source_file
+inkscape,arcade,2536,2214,2214,322,10,312,0,0,87.30283911671924,arcade,Output/supervised_ml_all/LLM_output/20251208_235659/inkscape/acdc/classification_data_clean_description_arcade_gpt-5-mini_llm.csv
+shepard,arcade,346,339,339,7,0,7,0,0,97.97687861271676,arcade,Output/supervised_ml_all/LLM_output/20251208_235659/dlr-shepard-shepard/acdc/classification_data_clean_description_arcade_gpt-5-mini_llm.csv
+shepard,arcan,346,339,339,7,1,6,0,0,97.97687861271676,arcan,Output/supervised_ml_all/LLM_output/20251208_235659/dlr-shepard-shepard/arcan/classification_data_clean_description_arcan_gpt-5-mini_llm.csv
+stackgres,arcade,1581,1575,1575,6,0,6,0,0,99.62049335863378,arcade,Output/supervised_ml_all/LLM_output/20251208_235659/ongresinc-stackgres/acdc/classification_data_clean_description_arcade_gpt-5-mini_llm.csv
+stackgres,arcan,1581,1575,1575,6,0,6,0,0,99.62049335863378,arcan,Output/supervised_ml_all/LLM_output/20251208_235659/ongresinc-stackgres/arcan/classification_data_clean_description_arcan_gpt-5-mini_llm.csv

@@ -1,0 +1,49 @@
+file,key,shape,dtype,size_mb,embedding_candidate
+Output/supervised_ml_all/run/inkscape_acdc/work/issues/inkscape/inkscape_discussion_openai/embeddings.npy,array,"(253, 1536)",float64,2.96,True
+Output/supervised_ml_all/run/inkscape_acdc/work/issues/inkscape/inkscape_discussion_openai/labels.npy,array,"(253,)",<U8,0.01,False
+Output/supervised_ml_all/run/inkscape_acdc/work/issues/inkscape/inkscape_discussion_openai/model.npy,array,(),<U22,0.0,False
+Output/supervised_ml_all/run/inkscape_acdc/work/issues/inkscape/inkscape_discussion_openai/row_ids.npy,array,"(253,)",int64,0.0,False
+Output/supervised_ml_all/run/inkscape_acdc/work/issues/inkscape/inkscape_discussion_openai/text_source.npy,array,(),<U8,0.0,False
+Output/supervised_ml_all/run/inkscape_acdc/work/issues/inkscape/inkscape_discussion_openai/token_counts.npy,array,"(253,)",int64,0.0,False
+Output/supervised_ml_all/run/inkscape_acdc/work/issues/inkscape/inkscape_discussion_openai.npz,embeddings,"(253, 1536)",float64,1.55,True
+Output/supervised_ml_all/run/inkscape_acdc/work/issues/inkscape/inkscape_discussion_openai.npz,labels,"(253,)",<U8,1.55,False
+Output/supervised_ml_all/run/inkscape_acdc/work/issues/inkscape/inkscape_discussion_openai.npz,row_ids,"(253,)",int64,1.55,False
+Output/supervised_ml_all/run/inkscape_acdc/work/issues/inkscape/inkscape_discussion_openai.npz,text_source,(),<U8,1.55,False
+Output/supervised_ml_all/run/inkscape_acdc/work/issues/inkscape/inkscape_discussion_openai.npz,model,(),<U22,1.55,False
+Output/supervised_ml_all/run/inkscape_acdc/work/issues/inkscape/inkscape_discussion_openai.npz,token_counts,"(253,)",int64,1.55,False
+data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_combined_text-embedding-3-small.npz,embeddings,"(346, 1536)",float64,2.12,True
+data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_combined_text-embedding-3-small.npz,labels,"(346,)",<U8,2.12,False
+data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_combined_text-embedding-3-small.npz,row_ids,"(346,)",int64,2.12,False
+data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_combined_text-embedding-3-small.npz,text_source,(),<U8,2.12,False
+data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_combined_text-embedding-3-small.npz,model,(),<U22,2.12,False
+data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_combined_text-embedding-3-small.npz,token_counts,"(346,)",int64,2.12,False
+data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_description_text-embedding-3-small.npz,embeddings,"(346, 1536)",float64,2.12,True
+data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_description_text-embedding-3-small.npz,labels,"(346,)",<U8,2.12,False
+data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_description_text-embedding-3-small.npz,row_ids,"(346,)",int64,2.12,False
+data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_description_text-embedding-3-small.npz,text_source,(),<U11,2.12,False
+data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_description_text-embedding-3-small.npz,model,(),<U22,2.12,False
+data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_description_text-embedding-3-small.npz,token_counts,"(346,)",int64,2.12,False
+data/embeddings/inkscape/inkscape_combined_text-embedding-3-small.npz,embeddings,"(2536, 1536)",float64,15.51,True
+data/embeddings/inkscape/inkscape_combined_text-embedding-3-small.npz,labels,"(2536,)",<U8,15.51,False
+data/embeddings/inkscape/inkscape_combined_text-embedding-3-small.npz,row_ids,"(2536,)",int64,15.51,False
+data/embeddings/inkscape/inkscape_combined_text-embedding-3-small.npz,text_source,(),<U8,15.51,False
+data/embeddings/inkscape/inkscape_combined_text-embedding-3-small.npz,model,(),<U22,15.51,False
+data/embeddings/inkscape/inkscape_combined_text-embedding-3-small.npz,token_counts,"(2536,)",int64,15.51,False
+data/embeddings/inkscape/inkscape_description_text-embedding-3-small.npz,embeddings,"(2536, 1536)",float64,15.51,True
+data/embeddings/inkscape/inkscape_description_text-embedding-3-small.npz,labels,"(2536,)",<U8,15.51,False
+data/embeddings/inkscape/inkscape_description_text-embedding-3-small.npz,row_ids,"(2536,)",int64,15.51,False
+data/embeddings/inkscape/inkscape_description_text-embedding-3-small.npz,text_source,(),<U11,15.51,False
+data/embeddings/inkscape/inkscape_description_text-embedding-3-small.npz,model,(),<U22,15.51,False
+data/embeddings/inkscape/inkscape_description_text-embedding-3-small.npz,token_counts,"(2536,)",int64,15.51,False
+data/embeddings/ongresinc-stackgres/ongresinc-stackgres_combined_text-embedding-3-small.npz,embeddings,"(1581, 1536)",float64,9.67,True
+data/embeddings/ongresinc-stackgres/ongresinc-stackgres_combined_text-embedding-3-small.npz,labels,"(1581,)",<U8,9.67,False
+data/embeddings/ongresinc-stackgres/ongresinc-stackgres_combined_text-embedding-3-small.npz,row_ids,"(1581,)",int64,9.67,False
+data/embeddings/ongresinc-stackgres/ongresinc-stackgres_combined_text-embedding-3-small.npz,text_source,(),<U8,9.67,False
+data/embeddings/ongresinc-stackgres/ongresinc-stackgres_combined_text-embedding-3-small.npz,model,(),<U22,9.67,False
+data/embeddings/ongresinc-stackgres/ongresinc-stackgres_combined_text-embedding-3-small.npz,token_counts,"(1581,)",int64,9.67,False
+data/embeddings/ongresinc-stackgres/ongresinc-stackgres_description_text-embedding-3-small.npz,embeddings,"(1581, 1536)",float64,9.67,True
+data/embeddings/ongresinc-stackgres/ongresinc-stackgres_description_text-embedding-3-small.npz,labels,"(1581,)",<U8,9.67,False
+data/embeddings/ongresinc-stackgres/ongresinc-stackgres_description_text-embedding-3-small.npz,row_ids,"(1581,)",int64,9.67,False
+data/embeddings/ongresinc-stackgres/ongresinc-stackgres_description_text-embedding-3-small.npz,text_source,(),<U11,9.67,False
+data/embeddings/ongresinc-stackgres/ongresinc-stackgres_description_text-embedding-3-small.npz,model,(),<U22,9.67,False
+data/embeddings/ongresinc-stackgres/ongresinc-stackgres_description_text-embedding-3-small.npz,token_counts,"(1581,)",int64,9.67,False

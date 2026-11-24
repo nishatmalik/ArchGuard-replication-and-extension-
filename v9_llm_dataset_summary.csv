@@ -1,0 +1,6 @@
+project,detector,model,total_records,predicted_ASI,accuracy,precision,recall,f1,tp,fp,fn,tn
+inkscape,arcade,gpt-5-mini,2214,0,0.8879855465221319,0.0,0.0,0.0,0,0,248,1966
+shepard,arcade,gpt-5-mini,339,0,0.8643067846607669,0.0,0.0,0.0,0,0,46,293
+shepard,arcan,gpt-5-mini,339,0,0.6489675516224189,0.0,0.0,0.0,0,0,119,220
+stackgres,arcade,gpt-5-mini,1575,0,0.8228571428571428,0.0,0.0,0.0,0,0,279,1296
+stackgres,arcan,gpt-5-mini,1575,2,0.8482539682539683,0.0,0.0,0.0,0,2,237,1336

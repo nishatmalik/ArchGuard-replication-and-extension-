@@ -1,0 +1,24 @@
+{
+  "model": "SVC",
+  "hyperparameters": {
+    "random_state": 42,
+    "probability": true,
+    "C": 1.0,
+    "kernel": "rbf",
+    "gamma": "scale"
+  },
+  "imbalance_strategy": "random_undersample",
+  "undersampling_seed": 42,
+  "embedding_model": "text-embedding-3-small",
+  "embedding_source": "original_replication_package",
+  "text_source": "description",
+  "cv_folds": 5,
+  "cv_repeats": 2,
+  "total_splits": 50,
+  "dataset_sha256": "b58a14b14dcce82c6da4a2c418438d16d172c70dd0be8b6ee1b12571ad53a0b2",
+  "statistical_test": "one-sided Wilcoxon signed-rank",
+  "std_ddof": 0,
+  "original_split_identity_verified": false,
+  "original_text_identity_verified": false,
+  "api_calls": 0
+}

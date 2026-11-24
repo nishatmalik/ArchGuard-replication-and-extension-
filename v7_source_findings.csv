@@ -1,0 +1,282 @@
+file,line_number,code
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,11,"from sklearn.model_selection import train_test_split, cross_val_score, KFold, StratifiedKFold"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,29,from sklearn.utils.class_weight import compute_class_weight
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,35,"TEXT_SOURCE_DESCRIPTION = ""description""  # title + description"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,36,"TEXT_SOURCE_COMBINED_FILTERED = ""combined""  # title + description + discussion (pre-MR filtered)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,37,"TEXT_SOURCE_COMBINED_UNFILTERED = ""combined_unfiltered""  # title + description + full discussion"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,39,VALID_TEXT_SOURCES = {
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,40,"TEXT_SOURCE_DESCRIPTION,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,41,"TEXT_SOURCE_COMBINED_FILTERED,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,42,"TEXT_SOURCE_COMBINED_UNFILTERED,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,77,Clean text without lemmatization - suitable for SBERT and other embeddings.
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,189,def _clear_cuda_cache():
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,190,"""""""Clear CUDA cache to free GPU memory."""""""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,194,torch.cuda.empty_cache()
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,205,"random_state=42,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,211,"random_state=42,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,219,"#     random_state=42,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,226,'svm': SVC(
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,227,"random_state=42,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,246,models['naive_bayes'] = GaussianNB()  # Default to GaussianNB for other embeddings
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,256,"random_state=42,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,283,"random_state=42,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,294,# 'class_weight': 'class_weight'  # Use sklearn's class_weight='balanced'
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,299,"# 'smote': SMOTE(random_state=42),"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,300,"# 'borderline_smote': BorderlineSMOTE(random_state=42),"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,301,"# 'adasyn': ADASYN(random_state=42),"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,302,"'random_undersample': RandomUnderSampler(random_state=42),"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,304,"#     smote=SMOTE(random_state=42, k_neighbors=3),  # Reduce neighbors for less aggressive oversampling"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,306,#     random_state=42
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,308,# 'smote_tomek': SMOTETomek(random_state=42)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,319,elif strategy_name == 'class_weight':
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,338,if strategy_name == 'class_weight':
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,340,"if hasattr(model, 'class_weight'):"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,341,model.set_params(class_weight='balanced')
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,343,"print(f""  Warning: {model_name} doesn't support class_weight, using original model"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,351,"class_weights = compute_class_weight(class_weight='balanced', classes=classes, y=y_train)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,352,"weight_lookup = {cls: weight for cls, weight in zip(classes, class_weights)}"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,356,def normalize_text_source(text_source: str) -> str:
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,357,"""""""Validate and normalize text_source to the supported set."""""""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,358,candidate = (text_source or TEXT_SOURCE_DESCRIPTION).strip().lower()
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,359,if candidate not in VALID_TEXT_SOURCES:
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,360,"valid = "", "".join(sorted(VALID_TEXT_SOURCES))"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,361,"raise ValueError(f""Unsupported text_source '{text_source}'. Valid options: {valid}"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,419,"""""""Evaluate model using stratified cross-validation and return metrics."""""""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,420,# Use StratifiedKFold to maintain class distribution in each fold
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,421,"skfold = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=42)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,448,if strategy_name == 'class_weight':
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,509,"n_folds=5, n_repeats=2, random_state=42"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,512,Evaluate model using repeated stratified k-fold cross-validation with significance testing.
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,526,random_state: Random seed for reproducibility
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,531,from sklearn.model_selection import RepeatedStratifiedKFold
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,545,# Setup repeated stratified k-fold
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,546,"rskf = RepeatedStratifiedKFold(n_splits=n_folds, n_repeats=n_repeats, random_state=random_state)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,556,"random_baseline = DummyClassifier(strategy='stratified', random_state=random_state)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,577,if strategy_name == 'class_weight':
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,696,"X, y, test_size=0.15, stratify=y, random_state=42"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,708,if strategy_name == 'class_weight':
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,800,"""""""Get available text encoding methods with SBERT chunk strategies."""""""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,813,"def extract_texts_from_data(df, text_source='description'):"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,819,"text_source: One of 'description', 'combined', 'combined_unfiltered'"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,827,normalized_source = normalize_text_source(text_source)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,839,if normalized_source == TEXT_SOURCE_DESCRIPTION:
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,843,prefer_unfiltered = normalized_source == TEXT_SOURCE_COMBINED_UNFILTERED
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,854,def load_precomputed_embeddings(embeddings_path):
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,855,"""""""Load pre-computed embeddings from .npz file."""""""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,856,"print(f""Loading pre-computed embeddings from {embeddings_path}..."")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,857,"data = np.load(embeddings_path, allow_pickle=True)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,858,embeddings = data['embeddings']
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,860,"print(f""Loaded embeddings shape: {embeddings.shape}"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,861,"return embeddings, labels"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,864,def _infer_dataset_ids_for_embeddings(data_path: Optional[Path]) -> list[str]:
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,866,Derive dataset identifiers to search for OpenAI embeddings.
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,869,"embeddings/<system>/<system>_<source>_<model>.npz layout, but fall back to"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,886,"def _find_openai_embeddings_path(data_path: Optional[str], text_source: Optional[str]) -> Path:"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,888,Locate a compatible OpenAI embeddings file for the given dataset/text source.
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,890,Supports legacy flat files (<dataset>_<text_source>_openai.npz) and the newer
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,891,generate_openai_embeddings layout (<dataset>/<dataset>_<text_source>_<model>.npz).
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,893,resolved_text_source = normalize_text_source(text_source or TEXT_SOURCE_DESCRIPTION)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,897,dataset_ids = _infer_dataset_ids_for_embeddings(dataset_path)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,900,"file_prefix = f""{dataset_id}_{resolved_text_source}"""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,901,"base_dir = Path(""embeddings"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,906,"base_dir / dataset_id / f""{file_prefix}_text-embedding-3-small.npz"",  # Common new default"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,916,"Path(f""data/classification/inkscape/inkscape_{resolved_text_source}_openai.npz""),"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,934,"""OpenAI embeddings not found. Tried:\n"""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,935,"f""{attempted_paths}\n\nGenerate embeddings first:\n"""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,936,"f""  python -m src.classification.generate_openai_embeddings --data {data_path} --text-source {resolved_text_source}"""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,940,"def chunk_text(text, max_words=256):"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,942,Split text into chunks of approximately max_words.
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,946,max_words: Maximum words per chunk
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,949,List of text chunks
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,952,chunks = []
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,954,chunk = ' '.join(words[i:i + max_words])
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,955,chunks.append(chunk)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,956,return chunks if chunks else [text]
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,959,"def sbert_encode_with_chunking(texts, model, chunk_strategy='avg', max_words=512,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,962,Encode texts using SBERT with different chunk pooling strategies.
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,967,"chunk_strategy: One of 'avg', 'max', 'tfidf_weighted'"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,968,- 'avg': Average pooling of chunk embeddings
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,969,- 'max': Max pooling of chunk embeddings (element-wise max)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,970,- 'tfidf_weighted': TF-IDF weighted average of chunks
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,971,max_words: Maximum words per chunk (default: 512)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,977,"numpy array of embeddings with shape (n_texts, embedding_dim)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,979,# Step 1: Chunk all texts and track chunk boundaries
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,980,all_chunks = []
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,981,chunk_boundaries = [0]
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,982,text_chunks_list = []
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,985,"chunks = chunk_text(text, max_words=max_words)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,986,text_chunks_list.append(chunks)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,987,all_chunks.extend(chunks)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,988,chunk_boundaries.append(len(all_chunks))
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,990,# Step 2: Batch encode all chunks
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,991,chunk_embeddings_all = model.encode(
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,992,"all_chunks,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,999,all_embeddings = []
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1001,"for i, chunks in enumerate(text_chunks_list):"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1002,start_idx = chunk_boundaries[i]
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1003,end_idx = chunk_boundaries[i + 1]
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1004,chunk_embeddings = chunk_embeddings_all[start_idx:end_idx]
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1007,if chunk_strategy == 'avg':
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1008,"final_embedding = np.mean(chunk_embeddings, axis=0)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1010,elif chunk_strategy == 'max':
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1011,"final_embedding = np.max(chunk_embeddings, axis=0)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1013,elif chunk_strategy == 'tfidf_weighted':
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1017,# Clean chunks before TF-IDF transformation
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1018,cleaned_chunks = [clean_text_for_tfidf(chunk) for chunk in chunks]
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1019,chunk_tfidf = tfidf_vectorizer.transform(cleaned_chunks)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1020,chunk_weights = np.array(chunk_tfidf.sum(axis=1)).flatten()
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1022,if chunk_weights.sum() > 0:
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1023,chunk_weights = chunk_weights / chunk_weights.sum()
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1025,chunk_weights = np.ones(len(chunks)) / len(chunks)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1027,"final_embedding = np.average(chunk_embeddings, axis=0, weights=chunk_weights)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1030,"raise ValueError(f""Unknown chunk_strategy: {chunk_strategy}"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1032,all_embeddings.append(final_embedding)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1034,return np.array(all_embeddings)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1037,"def _append_text_source_to_output_path(output_file: str | Path, text_source: str) -> Path:"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1046,normalized_source = text_source.lower()
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1049,"base = f""{base}_{text_source}"""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1054,"def test_sbert_chunk_strategies(texts, labels, model_name=""paraphrase-mpnet-base-v2"","
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1058,Test different SBERT chunk strategies and compare their performance.
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1064,max_words: Maximum words per chunk (default: 512)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1071,Dictionary with results for each strategy including embeddings and metrics
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1077,"print(f""Testing SBERT Chunk Strategies"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1080,"print(f""Chunk size: {max_words} words"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1104,"texts, y, test_size=0.15, random_state=42, stratify=y"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1111,"classifier = LogisticRegression(random_state=42, max_iter=2000, C=0.1)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1131,# Encode texts with chunking strategy
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1133,X_train = sbert_encode_with_chunking(
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1134,"texts_train, model, chunk_strategy=strategy,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1140,X_test = sbert_encode_with_chunking(
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1141,"texts_test, model, chunk_strategy=strategy,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1146,"print(f""Embedding shape: {X_train.shape}"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1160,rus = RandomUnderSampler(random_state=42)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1200,"'embeddings_train': X_train,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1201,"'embeddings_test': X_test,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1236,"def encode_texts(texts, encoding_method, data_path=None, text_source=None,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1244,data_path: Path to data file (for OpenAI embeddings)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1245,text_source: Text source type (for OpenAI embeddings)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1246,max_words: Maximum words per chunk for SBERT (default: 512)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1252,"Tuple of (embeddings/features, encoder/model or None)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1263,# Determine chunk strategy from encoding method name
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1269,chunk_strategy = strategy_map[encoding_method]
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1283,if chunk_strategy == 'tfidf_weighted':
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1284,"print(""Fitting TF-IDF vectorizer for chunk weighting..."")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1290,# Encode with chunking
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1291,embeddings = sbert_encode_with_chunking(
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1293,"chunk_strategy=chunk_strategy,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1303,_clear_cuda_cache()
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1304,"return embeddings, None"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1306,# Clear cache but keep model
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1307,_clear_cuda_cache()
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1308,"return embeddings, model"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1311,# Load pre-computed OpenAI embeddings
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1312,"embeddings_path = _find_openai_embeddings_path(data_path, text_source)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1314,"print(f""Loading OpenAI embeddings from: {embeddings_path}"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1315,"embeddings, _ = load_precomputed_embeddings(embeddings_path)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1317,if embeddings.shape[0] != num_texts:
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1320,"f""OpenAI embeddings count ({embeddings.shape[0]}) does not match """
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1321,"f""number of samples ({num_texts}). Regenerate embeddings for this """
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1322,"f""dataset/text source or remove the incompatible file: {embeddings_path}"""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1325,"return embeddings, None"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1380,"text_source: str = 'description',"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1395,text_source: Source of text for classification. One of:
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1403,normalized_text_source = normalize_text_source(text_source)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1404,"output_path = _append_text_source_to_output_path(output_file, normalized_text_source)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1407,"print(f""Text source: {normalized_text_source}"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1422,# Extract texts based on text_source parameter
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1423,"texts = extract_texts_from_data(df, text_source=normalized_text_source)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1429,# Auto-enable OpenAI embeddings when a matching file is present
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1430,"if os.getenv(""DISABLE_OPENAI_EMBEDDINGS"", """").strip().lower() not in {""1"", ""true"", ""yes""}:"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1432,"openai_path = _find_openai_embeddings_path(data_path, normalized_text_source)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1435,"print(f""Detected OpenAI embeddings at: {openai_path}"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1437,"print(f""No OpenAI embeddings detected: {exc}"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1468,"text_source=normalized_text_source,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1474,"X, encoder = encode_texts(texts, encoding_name, data_path=data_path, text_source=normalized_text_source)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1499,"random_state=42,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1627,"choices=sorted(VALID_TEXT_SOURCES),"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1628,"default=TEXT_SOURCE_DESCRIPTION,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/simple_ml.py,1666,"text_source=args.text_source,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,46,"VALID_TEXT_SOURCES,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,47,"TEXT_SOURCE_DESCRIPTION,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,48,"normalize_text_source,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,202,def _build_default_cache_path(
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,205,"text_source: str,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,211,Derive a deterministic cache path that is unique per configuration.
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,218,# Use output file's directory for cache
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,233,"cache_name = f""{stem}_{text_source}{prompt_suffix}{cot_suffix}_{safe_model}_responses.json"""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,234,return (base_dir / cache_name).resolve()
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,239,"text_source: str,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,264,"file_name = f""{data_path.stem}_{text_source}{prompt_suffix}{cot_suffix}_{safe_model}_llm.csv"""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,268,"def _derive_metrics_path(output_file: Path | None, data_path: Path, text_source: str,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,286,"stem = f""{data_path.stem}_{text_source}{prompt_suffix}{cot_suffix}_{safe_model}_llm"""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,347,chunks = []
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,352,chunks.append(text)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,353,if chunks:
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,354,"return ""\n"".join(chunks)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,365,"def _load_text_source_config(config_path: Optional[str]) -> dict[str, str]:"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,378,"raise ValueError(""text-source config must be a JSON object of key->text_source mappings."")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,382,normalized[key.lower()] = normalize_text_source(value)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,407,"def _select_text_source(dataset_path: Path, default_text_source: str, config_map: dict[str, str]) -> str:"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,409,Choose text_source for a dataset using config overrides when available.
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,434,return normalize_text_source(default_text_source)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,594,"text_source: str = 'combined',"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,599,"responses_cache: str = None,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,600,"cache_only: bool = False,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,609,"text_source: 'description', 'discussion', or 'combined'"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,614,responses_cache: Path to cache/save detailed responses (JSON)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,615,cache_only: Do not call OpenAI; rely solely on cache
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,644,"print(f""\nExtracting texts (source: {text_source})..."")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,645,"texts = extract_texts_from_data(df, text_source=text_source)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,647,# Prepare cache paths
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,648,if responses_cache:
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,649,responses_file = Path(responses_cache).resolve()
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,651,responses_file = _build_default_cache_path(
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,654,"text_source=text_source,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,660,cached_responses = {}
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,662,"print(f""\nLoading cached responses from {responses_file}..."")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,664,cached_responses = json.load(f)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,665,"print(f""Loaded {len(cached_responses)} cached items"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,669,if not cache_only:
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,675,if cached_responses:
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,676,"print(""Cache-only mode enabled; reusing cached predictions"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,678,"raise ValueError(""Cache-only mode requires an existing responses cache."")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,691,# Fill from cache
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,695,if issue_key in cached_responses:
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,696,cached = cached_responses[issue_key]
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,697,predictions[i] = cached.get('predicted_label')
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,698,"responses[i] = cached.get('llm_response', '')"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,699,"prompts[i] = cached.get('llm_prompt', '')"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,700,"print(f""  [{i+1}/{total}] Issue {issue_id}... {predictions[i]} (cached)"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,705,if cache_only and to_classify:
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,707,"raise ValueError(f""Cache-only mode enabled but missing cache for issues: {', '.join(missing[:10])}"""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,737,cached_responses[str(issue_id)] = {
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,834,if cached_responses:
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,836,# Persist merged cache with latest correctness flags
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,839,cached_responses[issue_key] = {
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,850,"json.dump(cached_responses, f, indent=2, ensure_ascii=False)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,851,"print(f""\nCached responses saved to {responses_file}"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,858,"metrics_path = _derive_metrics_path(Path(output_file), data_path, text_source, use_cot, model, prompt_style)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,860,"metrics_path = _derive_metrics_path(None, Path(data_path), text_source, use_cot, model, prompt_style)"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,865,"'text_source': text_source,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,915,"choices=sorted(VALID_TEXT_SOURCES),"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,959,"'--responses-cache',"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,960,help='Path to cache/save raw LLM responses (JSON). Defaults to <output>_responses.json or <data>_responses.json'
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,967,"'--cache-only',"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,969,help='Do not call OpenAI; reuse cached responses only'
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,973,"help='JSON file mapping dataset identifiers to text_source overrides (keys: path/stem/parent, optional ""__default__"")'"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,987,text_source_overrides = _load_text_source_config(args.text_source_config)
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,992,if len(data_targets) > 1 and args.responses_cache:
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,993,"raise ValueError(""Cannot use a single --responses-cache for multiple datasets; omit to auto-derive per file."")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,998,resolved_text_source = _select_text_source(
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,1000,"default_text_source=args.text_source,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,1001,"config_map=text_source_overrides,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,1018,"text_source=resolved_text_source,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,1026,"print(f""  Text source: {resolved_text_source}"")"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,1031,"text_source=resolved_text_source,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,1036,"responses_cache=args.responses_cache,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/classification/zero_shot_llm_classifier.py,1037,"cache_only=args.cache_only,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/pipeline/classification_pipeline.py,48,"text_source: str = ""combined"""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/pipeline/classification_pipeline.py,307,"results_path = reports_dir / f""{config.system_name}_{config.algorithm}_{config.text_source}_results.csv"""
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/pipeline/classification_pipeline.py,312,"text_source=config.text_source,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/pipeline/classification_pipeline.py,492,"text_source=args.text_source,"
+ardoco-Replication-Package-ICSA26_Architecture-in-the-Cradle-4f26553/src/pipeline/classification_pipeline.py,523,"f""  Output root: {config.output_root}\n  Text source: {config.text_source}\n"""

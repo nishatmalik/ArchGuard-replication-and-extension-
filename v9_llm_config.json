@@ -1,0 +1,18 @@
+{
+  "model": "gpt-5-mini",
+  "text_source": "description",
+  "prediction_source": "original_archguard_cache",
+  "fresh_llm_inference": false,
+  "use_cot": false,
+  "retrieval_augmented": false,
+  "expected_records": 6390,
+  "available_predictions": 6042,
+  "missing_predictions": 348,
+  "coverage_percentage": 94.55399061032864,
+  "missing_prediction_policy": "exclude_and_report",
+  "svm_comparison": "identical_available_test_records",
+  "evaluation_splits": 50,
+  "dataset_sha256": "b58a14b14dcce82c6da4a2c418438d16d172c70dd0be8b6ee1b12571ad53a0b2",
+  "exact_original_prompt_verified": false,
+  "api_calls": 0
+}

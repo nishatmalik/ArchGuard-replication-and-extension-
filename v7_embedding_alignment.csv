@@ -1,0 +1,6 @@
+project,detector,records,dimensions,cache_label_matches,cache_label_mismatches,label_agreement_percentage,alignment_method,source_file
+inkscape,arcade,2536,1536,2536,0,100.0,direct_issue_id,data/embeddings/inkscape/inkscape_description_text-embedding-3-small.npz
+stackgres,arcade,1581,1536,1548,33,97.91,direct_issue_id,data/embeddings/ongresinc-stackgres/ongresinc-stackgres_description_text-embedding-3-small.npz
+stackgres,arcan,1581,1536,1238,343,78.3,direct_issue_id,data/embeddings/ongresinc-stackgres/ongresinc-stackgres_description_text-embedding-3-small.npz
+shepard,arcade,346,1536,340,6,98.27,direct_issue_id,data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_description_text-embedding-3-small.npz
+shepard,arcan,346,1536,260,86,75.14,direct_issue_id,data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_description_text-embedding-3-small.npz

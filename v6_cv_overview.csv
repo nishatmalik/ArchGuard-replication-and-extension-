@@ -1,0 +1,6 @@
+project,detector,total_splits,avg_train,avg_test,avg_train_ASI,avg_test_ASI,leakage
+inkscape,arcade,10,2028.8,507.2,206.4,51.6,0
+shepard,arcade,10,276.8,69.2,36.8,9.2,0
+shepard,arcan,10,276.8,69.2,96.0,24.0,0
+stackgres,arcade,10,1264.8,316.2,223.2,55.8,0
+stackgres,arcan,10,1264.8,316.2,189.6,47.4,0

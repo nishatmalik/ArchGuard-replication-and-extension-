@@ -1,0 +1,8 @@
+condition,method,reliability_controls,enhanced_prompt,retrieval,structured_reasoning,purpose,example_selection,experimental_status
+E0,Archived zero-shot,False,False,False,False,Existing replication artifact,none,completed
+E1,Fresh reliable zero-shot,True,False,False,False,Fresh reference baseline,none,planned
+E2,Enhanced zero-shot prompt,True,True,False,False,Prompt engineering effect,none,planned
+E3,Random few-shot,True,False,False,False,Random example selection control,random,planned
+E4,Retrieval-augmented few-shot,True,False,True,False,Similarity-based retrieval effect,similarity,planned
+E5,Structured architectural reasoning,True,False,False,True,Structured reasoning effect,none,planned
+E6,Proposed hybrid approach,True,True,True,True,Combined intervention,similarity,planned

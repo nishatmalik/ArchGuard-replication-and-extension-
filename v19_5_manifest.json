@@ -1,0 +1,30 @@
+{
+    "version": "V19.5",
+    "seed": 42,
+    "training_records": 2500,
+    "pilot_records": 100,
+    "conflicting_issues": 157,
+    "dataset_configurations": 5,
+    "examples_per_prompt": 4,
+    "total_selected_records": 20,
+    "ASI_per_prompt": 2,
+    "NON_ASI_per_prompt": 2,
+    "class_order": [
+        "ASI",
+        "NON_ASI",
+        "ASI",
+        "NON_ASI"
+    ],
+    "selection_policy": "fixed random examples per dataset",
+    "match_project": true,
+    "match_detector": true,
+    "training_only": true,
+    "unique_issues_within_prompt": true,
+    "unique_text_hashes_within_prompt": true,
+    "training_sha256": "c877aeb80f4048c4beef4c2ac24a97d585efd8554ac2fcb538a1583d955f286b",
+    "previous_experiments": "preserved",
+    "pilot_ground_truth_accessed": false,
+    "fresh_model_inference": false,
+    "paid_api_calls": 0,
+    "api_cost_usd": 0.0
+}

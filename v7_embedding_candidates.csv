@@ -1,0 +1,9 @@
+file,key,rows,dimensions
+Output/supervised_ml_all/run/inkscape_acdc/work/issues/inkscape/inkscape_discussion_openai/embeddings.npy,array,253,1536
+Output/supervised_ml_all/run/inkscape_acdc/work/issues/inkscape/inkscape_discussion_openai.npz,embeddings,253,1536
+data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_combined_text-embedding-3-small.npz,embeddings,346,1536
+data/embeddings/dlr-shepard-shepard/dlr-shepard-shepard_description_text-embedding-3-small.npz,embeddings,346,1536
+data/embeddings/inkscape/inkscape_combined_text-embedding-3-small.npz,embeddings,2536,1536
+data/embeddings/inkscape/inkscape_description_text-embedding-3-small.npz,embeddings,2536,1536
+data/embeddings/ongresinc-stackgres/ongresinc-stackgres_combined_text-embedding-3-small.npz,embeddings,1581,1536
+data/embeddings/ongresinc-stackgres/ongresinc-stackgres_description_text-embedding-3-small.npz,embeddings,1581,1536

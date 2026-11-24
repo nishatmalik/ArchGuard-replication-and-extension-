@@ -1,0 +1,1333 @@
+record_id,record_uid,issue_uid,project,detector,dataset,title,description,text,text_hash,label,example_number,selection_method
+754,inkscape:1741:arcade,inkscape:1741,inkscape,arcade,inkscape_arcade,Pdf import displaces transparent gradients in pdf created with cairo > 1.11.4,"Pdf import displaces transparent gradients in pdf created with cairo > 1.11.4
+Migrated from https://bugs.launchpad.net/inkscape/+bug/1078430 (a lot of copy paste but proofread and retested on my current system, did not test across different versions of cairo and their exports)
+
+#### Summary:
+
+- Inkscape incorrectly converts transparent gradients of PDFs to SVG (created by Inkscape export, cairo >= 1.11.4, saving as pdf or printing to pdf via GTK+ print dialog)
+
+#### Steps to reproduce:
+
+- open Inkscape
+- open [04831-1.svg](/uploads/b1321b638b765ff1f1ad1454c756e0dd/04831-1.svg) or create a rectangle and give it a gradient (will be `#0000ffff` to `#0000ff00` by default)
+- save as pdf (1.4 or 1.5, default values) 
+- open created pdf in Inkscape (default internal import)
+
+#### What happened?
+- The gradient fills are displaced and partially clipped off
+- if poppler/cairo import used, different error occurs (see https://gitlab.com/inkscape/inbox/-/issues/3282).
+
+#### What should have happened?
+- The gradient fills in original SVG and opened PDF look identical (or at least very similar)
+
+#### Pdfs affected
+##### Affects newer versions of cairo
+- problematic pdfs created (by su_v) with cairo 1.12.4, 1.12.6 and 1.12.8 on OS X 10.7.4 (64bit) with GTK+/Quartz builds of Inkscape 0.48.3.1 and Inkscape 0.48+devel r11871.  
+- unproblematic pdfs created (by su_v) with cairo (all <= 1.12.2) 1.8.8, 1.8.10 and 1.10.2 on all official Mac OS X Inkscape packages >= 0.47 (in 2012-11-13)
+- unproblematic pdfs created (by su_v) with cairo 1.10.2 (X11), 1.11.4 (Quartz) with local builds on Mac OS X 10.5.8 (32bit)
+- scaled rsvg-convert pdfs (see doesn't affect section)
+
+<details><summary>pdf rendered in pdf viewers</summary>
+Problematic pdf (created with cairo 1.12.8)
+
+- crashed/segfaulted xpdf 3.03 on Ubuntu (does not segfault 3.04-7 on Linux Mint 19.1).  
+- rendered with solid fill colors instead of gradient fills on Ghostscript 9.05 on OS X
+- rendered normally on Evince 2.30.3 (OS X), 3.6.0 (Ubuntu 12.10), Xpdf 3.02 (OS X), Ghostscript 9.06 (Ubuntu 12.10) and Apple's Preview.app (OS X)
+</details>
+
+##### Doesn't affect
+- pdfs created with libcairo 1.11.4 or older
+    - unproblematic pdfs created (by su_v) with cairo 1.12.2 (X11) with local builds on OS X 10.7.4 (64bit)
+    - unproblematic pdfs created (by su_v) with cairo 1.12.2 on a Ubuntu 12.10 x64 VM
+- fully opaque gradients, but these imports in a completely different way (transparent gradients are separated into opaque gradient and a mask with a transparency gradient)
+- librsvg 2.36.4 (cairo 1.12.8) export (still imported wrong on poppler/cairo import)
+    - unless rsvg-convert scales the pdf to match the page size in Inkscape (in which case, internal import has same results). E.g `rsvg-convert --format=pdf --zoom=0.8 --output=04831-1-cairo-1_12_8-librsvg-2_36_4-zoom_0.8.pdf 04831-1.svg`, which produced [04831-1-cairo-1_12_8-librsvg-2_36_4-zoom_0.8.pdf](/uploads/2f4a9606095007c9db41ecc6bdd6d48c/04831-1-cairo-1_12_8-librsvg-2_36_4-zoom_0.8.pdf)
+
+I can confirm that it doesn't affect pdfs exported by the 0.48.5-1 package (7z archive for Windows)
+
+#### Example files
+- [04831-1.svg](/uploads/353fe55d4b6cf1507929dda0c8e9abd5/04831-1.svg) -  linked above
+- [04831-1-cairo-1_15_10-2ubuntu0_1-838ae0f22d-1_1-dev.pdf](/uploads/b26e9acc45a4167ade98249fb5699db7/04831-1-cairo-1_15_10-2ubuntu0_1-838ae0f22d-1_1-dev.pdf) - Inkscape 1.1-dev (838ae0f22d, 2020-07-14, custom) export, looks slightly different from others
+- [04831-1-cairo-from-7z-0_48_5-1_windows.pdf](/uploads/8c846692a369801b1d0aa1961202937b/04831-1-cairo-from-7z-0_48_5-1_windows.pdf) - should be correct, created with 0.48.5-1 r10040 x32 7z archive on Windows 10 x64
+- [04831-1-cairo-1_12_8-04831.pdf](/uploads/492db8f0560b6ea735ead24fde9640ee/04831-1-cairo-1_12_8-04831.pdf) - PDF exported with Inkscape 0.48.3.1 and cairo 1.12.8
+- [04831-1-cairo-1_12_8-r11871.pdf](/uploads/248bc7b16fdd392eb227de4b2ef7292e/04831-1-cairo-1_12_8-r11871.pdf) - PDF exported with Inkscape 0.48+devel r11871 and cairo 1.12.8
+- [04831-1-cairo-1_12_8-librsvg-2_36_4.pdf](/uploads/98f129fde2b4b14e48bbd4c13c7109eb/04831-1-cairo-1_12_8-librsvg-2_36_4.pdf) - should be imported correctly, but pdf is a different size
+- [04831-1-cairo-1_12_8-librsvg-2_36_4-zoom_0.8.pdf](/uploads/efb7cc3eddfbf064301c7853a2ff31f3/04831-1-cairo-1_12_8-librsvg-2_36_4-zoom_0.8.pdf) - linked above
+
+| older file comparison | comparison on old and new | 
+| --- | --- |
+| ![1078430-screenshot-comparing-PDF-cairo-versions-in-r11871-osx](/uploads/ca9fd1af9ce7de14b50997dc3b47c26e/1078430-screenshot-comparing-PDF-cairo-versions-in-r11871-osx.png) | ![1078430-screenshot-comparing-old-and-new-exports](/uploads/a2b47f1f61a84485ac960b2ec885e6e8/1078430-screenshot-comparing-old-and-new-exports.png) |
+
+#### Version info from su_v on launchpad
+Reproduced on Mac OS X 10.5.8 (32bit), OS X 10.7.4 (64bit) and Ubuntu 12.10 (64bit, VM) with:
+- Inkscape stable (0.47-0.48.3.1, various cairo and poppler versions)
+- Inkscape trunk r11871 (default PDF input extension) [*]
+- Inkscape trunk r11871 (experimental PDF via poppler-cairo input extension)
+- PDF -> SVG using pdftocairo (from poppler 0.20.4, 0.20.5)
+[*] poppler versions don't seem to affect the result (same import with poppler 0.16.6, 0.16.7, 0.18.4, 0.20.4 and 0.20.5)
+
+#### Version Info (me and others on launchpad)
+
+- Reproduced Inkscape 1.1-dev (838ae0f22d, 2020-07-14, custom) Linux Mint 19.1, libcairo2 1.15.10-2ubuntu0.1
+- Reproduced Inkscape 0.92.5 (6c0c36ef5a, 2020-05-15) Linux Mint 19.1, libcairo2 1.15.10-2ubuntu0.1
+- Reproduced 0.48.5-1 r10040 x32 7z archive on Windows 10 x64 (though it exported a pdf that did **not** have issues
+
+<details><summary>Some more replication info</summary>
+I'm unclear what was tested (is this pdf exports, or imports). If it includes imports, it may conflict against my tests in 0.48.5-1 . Important to know if it conflicts with my tests, so included it
+
+* Reproduced on Windows XP, Inkscape trunk revision 11871, cairo 1.12.8 (local test).
+* Not reproduced with cairo 1.11.2.
+
+This is useful, but not too relevant to this report (which focuses on internal import, which corresponds to import with cairo)
+Tested with Inkscape 0.91 r13725 on Kubuntu.
+
+Import with cairo:
+* 04831-1-cairo-1_12_8-04831.pdf : not displaced but partially clipped off.
+* 04831-1-cairo-1_12_8-librsvg-2_36_4.pdf : not displaced, not clipped off (correct).
+* 04831-1-cairo-1_12_8-librsvg-2_36_4-zoom_0.8.pdf : not displaced but partially clipped off.
+* 04831-1-cairo-1_12_8-r11871.pdf : not displaced but partially clipped off.
+
+Import with poppler:
+* 04831-1-cairo-1_12_8-04831.pdf : not clipped off but displaced and blue gradient not stretched (=circle).
+* 04831-1-cairo-1_12_8-r11871.pdf : not clipped off but displaced and blue gradient not stretched (=circle).
+* 04831-1-cairo-1_12_8-librsvg-2_36_4.pdf : not displaced, not clipped off but blue gradient not stretched (=circle).
+* 04831-1-cairo-1_12_8-librsvg-2_36_4-zoom_0.8.pdf : not clipped off but displaced and blue gradient not stretched (=circle).
+</details>","Pdf import displaces transparent gradients in pdf created with cairo > 1.11.4
+
+Pdf import displaces transparent gradients in pdf created with cairo > 1.11.4
+Migrated from https://bugs.launchpad.net/inkscape/+bug/1078430 (a lot of copy paste but proofread and retested on my current system, did not test across different versions of cairo and their exports)
+
+#### Summary:
+
+- Inkscape incorrectly converts transparent gradients of PDFs to SVG (created by Inkscape export, cairo >= 1.11.4, saving as pdf or printing to pdf via GTK+ print dialog)
+
+#### Steps to reproduce:
+
+- open Inkscape
+- open [04831-1.svg](/uploads/b1321b638b765ff1f1ad1454c756e0dd/04831-1.svg) or create a rectangle and give it a gradient (will be `#0000ffff` to `#0000ff00` by default)
+- save as pdf (1.4 or 1.5, default values) 
+- open created pdf in Inkscape (default internal import)
+
+#### What happened?
+- The gradient fills are displaced and partially clipped off
+- if poppler/cairo import used, different error occurs (see https://gitlab.com/inkscape/inbox/-/issues/3282).
+
+#### What should have happened?
+- The gradient fills in original SVG and opened PDF look identical (or at least very similar)
+
+#### Pdfs affected
+##### Affects newer versions of cairo
+- problematic pdfs created (by su_v) with cairo 1.12.4, 1.12.6 and 1.12.8 on OS X 10.7.4 (64bit) with GTK+/Quartz builds of Inkscape 0.48.3.1 and Inkscape 0.48+devel r11871.  
+- unproblematic pdfs created (by su_v) with cairo (all <= 1.12.2) 1.8.8, 1.8.10 and 1.10.2 on all official Mac OS X Inkscape packages >= 0.47 (in 2012-11-13)
+- unproblematic pdfs created (by su_v) with cairo 1.10.2 (X11), 1.11.4 (Quartz) with local builds on Mac OS X 10.5.8 (32bit)
+- scaled rsvg-convert pdfs (see doesn't affect section)
+
+<details><summary>pdf rendered in pdf viewers</summary>
+Problematic pdf (created with cairo 1.12.8)
+
+- crashed/segfaulted xpdf 3.03 on Ubuntu (does not segfault 3.04-7 on Linux Mint 19.1).  
+- rendered with solid fill colors instead of gradient fills on Ghostscript 9.05 on OS X
+- rendered normally on Evince 2.30.3 (OS X), 3.6.0 (Ubuntu 12.10), Xpdf 3.02 (OS X), Ghostscript 9.06 (Ubuntu 12.10) and Apple's Preview.app (OS X)
+</details>
+
+##### Doesn't affect
+- pdfs created with libcairo 1.11.4 or older
+    - unproblematic pdfs created (by su_v) with cairo 1.12.2 (X11) with local builds on OS X 10.7.4 (64bit)
+    - unproblematic pdfs created (by su_v) with cairo 1.12.2 on a Ubuntu 12.10 x64 VM
+- fully opaque gradients, but these imports in a completely different way (transparent gradients are separated into opaque gradient and a mask with a transparency gradient)
+- librsvg 2.36.4 (cairo 1.12.8) export (still imported wrong on poppler/cairo import)
+    - unless rsvg-convert scales the pdf to match the page size in Inkscape (in which case, internal import has same results). E.g `rsvg-convert --format=pdf --zoom=0.8 --output=04831-1-cairo-1_12_8-librsvg-2_36_4-zoom_0.8.pdf 04831-1.svg`, which produced [04831-1-cairo-1_12_8-librsvg-2_36_4-zoom_0.8.pdf](/uploads/2f4a9606095007c9db41ecc6bdd6d48c/04831-1-cairo-1_12_8-librsvg-2_36_4-zoom_0.8.pdf)
+
+I can confirm that it doesn't affect pdfs exported by the 0.48.5-1 package (7z archive for Windows)
+
+#### Example files
+- [04831-1.svg](/uploads/353fe55d4b6cf1507929dda0c8e9abd5/04831-1.svg) -  linked above
+- [04831-1-cairo-1_15_10-2ubuntu0_1-838ae0f22d-1_1-dev.pdf](/uploads/b26e9acc45a4167ade98249fb5699db7/04831-1-cairo-1_15_10-2ubuntu0_1-838ae0f22d-1_1-dev.pdf) - Inkscape 1.1-dev (838ae0f22d, 2020-07-14, custom) export, looks slightly different from others
+- [04831-1-cairo-from-7z-0_48_5-1_windows.pdf](/uploads/8c846692a369801b1d0aa1961202937b/04831-1-cairo-from-7z-0_48_5-1_windows.pdf) - should be correct, created with 0.48.5-1 r10040 x32 7z archive on Windows 10 x64
+- [04831-1-cairo-1_12_8-04831.pdf](/uploads/492db8f0560b6ea735ead24fde9640ee/04831-1-cairo-1_12_8-04831.pdf) - PDF exported with Inkscape 0.48.3.1 and cairo 1.12.8
+- [04831-1-cairo-1_12_8-r11871.pdf](/uploads/248bc7b16fdd392eb227de4b2ef7292e/04831-1-cairo-1_12_8-r11871.pdf) - PDF exported with Inkscape 0.48+devel r11871 and cairo 1.12.8
+- [04831-1-cairo-1_12_8-librsvg-2_36_4.pdf](/uploads/98f129fde2b4b14e48bbd4c13c7109eb/04831-1-cairo-1_12_8-librsvg-2_36_4.pdf) - should be imported correctly, but pdf is a different size
+- [04831-1-cairo-1_12_8-librsvg-2_36_4-zoom_0.8.pdf](/uploads/efb7cc3eddfbf064301c7853a2ff31f3/04831-1-cairo-1_12_8-librsvg-2_36_4-zoom_0.8.pdf) - linked above
+
+| older file comparison | comparison on old and new | 
+| --- | --- |
+| ![1078430-screenshot-comparing-PDF-cairo-versions-in-r11871-osx](/uploads/ca9fd1af9ce7de14b50997dc3b47c26e/1078430-screenshot-comparing-PDF-cairo-versions-in-r11871-osx.png) | ![1078430-screenshot-comparing-old-and-new-exports](/uploads/a2b47f1f61a84485ac960b2ec885e6e8/1078430-screenshot-comparing-old-and-new-exports.png) |
+
+#### Version info from su_v on launchpad
+Reproduced on Mac OS X 10.5.8 (32bit), OS X 10.7.4 (64bit) and Ubuntu 12.10 (64bit, VM) with:
+- Inkscape stable (0.47-0.48.3.1, various cairo and poppler versions)
+- Inkscape trunk r11871 (default PDF input extension) [*]
+- Inkscape trunk r11871 (experimental PDF via poppler-cairo input extension)
+- PDF -> SVG using pdftocairo (from poppler 0.20.4, 0.20.5)
+[*] poppler versions don't seem to affect the result (same import with poppler 0.16.6, 0.16.7, 0.18.4, 0.20.4 and 0.20.5)
+
+#### Version Info (me and others on launchpad)
+
+- Reproduced Inkscape 1.1-dev (838ae0f22d, 2020-07-14, custom) Linux Mint 19.1, libcairo2 1.15.10-2ubuntu0.1
+- Reproduced Inkscape 0.92.5 (6c0c36ef5a, 2020-05-15) Linux Mint 19.1, libcairo2 1.15.10-2ubuntu0.1
+- Reproduced 0.48.5-1 r10040 x32 7z archive on Windows 10 x64 (though it exported a pdf that did **not** have issues
+
+<details><summary>Some more replication info</summary>
+I'm unclear what was tested (is this pdf exports, or imports). If it includes imports, it may conflict against my tests in 0.48.5-1 . Important to know if it conflicts with my tests, so included it
+
+* Reproduced on Windows XP, Inkscape trunk revision 11871, cairo 1.12.8 (local test).
+* Not reproduced with cairo 1.11.2.
+
+This is useful, but not too relevant to this report (which focuses on internal import, which corresponds to import with cairo)
+Tested with Inkscape 0.91 r13725 on Kubuntu.
+
+Import with cairo:
+* 04831-1-cairo-1_12_8-04831.pdf : not displaced but partially clipped off.
+* 04831-1-cairo-1_12_8-librsvg-2_36_4.pdf : not displaced, not clipped off (correct).
+* 04831-1-cairo-1_12_8-librsvg-2_36_4-zoom_0.8.pdf : not displaced but partially clipped off.
+* 04831-1-cairo-1_12_8-r11871.pdf : not displaced but partially clipped off.
+
+Import with poppler:
+* 04831-1-cairo-1_12_8-04831.pdf : not clipped off but displaced and blue gradient not stretched (=circle).
+* 04831-1-cairo-1_12_8-r11871.pdf : not clipped off but displaced and blue gradient not stretched (=circle).
+* 04831-1-cairo-1_12_8-librsvg-2_36_4.pdf : not displaced, not clipped off but blue gradient not stretched (=circle).
+* 04831-1-cairo-1_12_8-librsvg-2_36_4-zoom_0.8.pdf : not clipped off but displaced and blue gradient not stretched (=circle).
+</details>",9b163108f4d7d407c4f57ec4316b06b50dc10e3aceefba819dbccdc0c29811f0,ASI,1,matched_random
+2403,inkscape:3279:arcade,inkscape:3279,inkscape,arcade,inkscape_arcade,Theme from Welcome dialog overrides selected theme from preferences,"Theme from Welcome dialog overrides selected theme from preferences
+#### Summary:
+<!-- Summarize the issue/suggestion concisely: -->
+
+The theme set in Welcome dialog overrides the ones chosen from the preferences dialog. Regression from 1.1.x
+
+#### Steps to reproduce:
+<!-- Describe what you did (step-by-step) so we can reproduce: -->
+
+- open Inkscape
+- From Welcome Screen choose 'Compact' (opens Inkscape with Minwaita+Hicolor-symbolic)
+- Choose a different icon-pack (multicolor) from the preferences dialog
+- Restart Inkscape
+
+#### What happened?
+
+Inkscape opens with Hicolor icon theme (despite the iconTheme in preferences.xml being multicolor).
+
+#### What should have happened?
+
+Icons/Theme should reflect what was selected.
+
+#### Version info
+
+```
+Inkscape 1.2-alpha (07dea3e, 2022-02-18)
+
+    GLib version:     2.64.6
+    GTK version:      3.24.20
+    glibmm version:   2.64.2
+    gtkmm version:    3.24.2
+    libxml2 version:  2.9.10
+    libxslt version:  1.1.34
+    Cairo version:    1.17.4
+    Pango version:    1.44.7
+    HarfBuzz version: 2.6.4
+
+    OS version:       Ubuntu 20.04.3 LTS
+```","Theme from Welcome dialog overrides selected theme from preferences
+
+Theme from Welcome dialog overrides selected theme from preferences
+#### Summary:
+<!-- Summarize the issue/suggestion concisely: -->
+
+The theme set in Welcome dialog overrides the ones chosen from the preferences dialog. Regression from 1.1.x
+
+#### Steps to reproduce:
+<!-- Describe what you did (step-by-step) so we can reproduce: -->
+
+- open Inkscape
+- From Welcome Screen choose 'Compact' (opens Inkscape with Minwaita+Hicolor-symbolic)
+- Choose a different icon-pack (multicolor) from the preferences dialog
+- Restart Inkscape
+
+#### What happened?
+
+Inkscape opens with Hicolor icon theme (despite the iconTheme in preferences.xml being multicolor).
+
+#### What should have happened?
+
+Icons/Theme should reflect what was selected.
+
+#### Version info
+
+```
+Inkscape 1.2-alpha (07dea3e, 2022-02-18)
+
+    GLib version:     2.64.6
+    GTK version:      3.24.20
+    glibmm version:   2.64.2
+    gtkmm version:    3.24.2
+    libxml2 version:  2.9.10
+    libxslt version:  1.1.34
+    Cairo version:    1.17.4
+    Pango version:    1.44.7
+    HarfBuzz version: 2.6.4
+
+    OS version:       Ubuntu 20.04.3 LTS
+```",d1c8479ff82594fbb8bd4d8b57965ae95b42a1415966a89867eb06dd9d6ec3f6,NON_ASI,2,matched_random
+1257,inkscape:1677:arcade,inkscape:1677,inkscape,arcade,inkscape_arcade,Crash on quit with grid shown (Indirect regression of !2106),"Crash on quit with grid shown (Indirect regression of !2106)
+#### Steps to reproduce:
+
+*This is an indirect regression from !2106. The issue existed before but typically would not produce a crash because of differences in Glib/Glibmm memory management.*
+
+- open Inkscape
+- show grid (View > Page Grid)
+- close window (with or without saving)
+
+#### What happened?
+
+Crash (heap-use-after-free).
+
+During destruction, `SPCanvasItem` calls `Canvas::redraw_area` but the canvas has already been destroyed.
+
+```
+==22738==ERROR: AddressSanitizer: heap-use-after-free on address 0x6150001cbce4 at pc 0x7f27c1fcdef9 bp 0x7fffe40475b0 sp 0x7fffe40475a8
+READ of size 1 at 0x6150001cbce4 thread T0
+    #0 0x7f27c1fcdef8 in Inkscape::UI::Widget::Canvas::redraw_area(int, int, int, int) src/ui/widget/canvas.cpp:175:9
+    #1 0x7f27c109b2d1 in redraw_if_visible(SPCanvasItem*) src/display/sp-canvas-item.cpp:161:27
+    #2 0x7f27c109afe9 in sp_canvas_item_dispose(_GObject*) src/display/sp-canvas-item.cpp:192:11
+    #3 0x7f27be50a839 in g_object_run_dispose (/usr/lib/libgobject-2.0.so.0+0x14839)
+    #4 0x7f27c109ad74 in sp_canvas_item_destroy(SPCanvasItem*) src/display/sp-canvas-item.cpp:171:5
+    #5 0x7f27c0fc4422 in Inkscape::CanvasGrid::~CanvasGrid() src/display/canvas-grid.cpp:165:9
+    #6 0x7f27c0fc7ac3 in Inkscape::CanvasXYGrid::~CanvasXYGrid() src/display/canvas-grid.cpp:448:1
+    #7 0x7f27c0fc7afd in Inkscape::CanvasXYGrid::~CanvasXYGrid() src/display/canvas-grid.cpp:446:1
+    #8 0x7f27c16ef27b in SPNamedView::release() src/object/sp-namedview.cpp:273:9
+    #9 0x7f27c170220c in SPObject::releaseReferences() src/object/sp-object.cpp:814:11
+    #10 0x7f27c1701f9c in SPObject::detach(SPObject*) src/object/sp-object.cpp:569:13
+    #11 0x7f27c1703225 in SPObject::release() src/object/sp-object.cpp:623:17
+    #12 0x7f27c164d3f4 in SPItem::release() src/object/sp-item.cpp:442:15
+    #13 0x7f27c165cdfb in SPLPEItem::release() src/object/sp-lpe-item.cpp:102:13
+    #14 0x7f27c1633dd4 in SPGroup::release() src/object/sp-item-group.cpp:80:16
+    #15 0x7f27c172a03a in SPRoot::release() src/object/sp-root.cpp:96:14
+    #16 0x7f27c170220c in SPObject::releaseReferences() src/object/sp-object.cpp:814:11
+    #17 0x7f27c22ba210 in SPDocument::~SPDocument() src/document.cpp:179:15
+    #18 0x7f27c22babcd in SPDocument::~SPDocument() src/document.cpp:148:27
+    #19 0x7f27c250efc1 in InkscapeApplication::document_close(SPDocument*) src/inkscape-application.cpp:285:9
+    #20 0x7f27c2511d1d in ConcreteInkscapeApplication<Gtk::Application>::destroy_window(InkscapeWindow*) src/inkscape-application.cpp:896:17
+```
+
+#### What should have happened?
+
+No crash.
+
+#### Inkscape Version and Operating System:
+
+- Inkscape Version: `Inkscape 1.1-dev (93759687eb, 2020-07-04, custom)`
+- Operating System: Arch Linux","Crash on quit with grid shown (Indirect regression of !2106)
+
+Crash on quit with grid shown (Indirect regression of !2106)
+#### Steps to reproduce:
+
+*This is an indirect regression from !2106. The issue existed before but typically would not produce a crash because of differences in Glib/Glibmm memory management.*
+
+- open Inkscape
+- show grid (View > Page Grid)
+- close window (with or without saving)
+
+#### What happened?
+
+Crash (heap-use-after-free).
+
+During destruction, `SPCanvasItem` calls `Canvas::redraw_area` but the canvas has already been destroyed.
+
+```
+==22738==ERROR: AddressSanitizer: heap-use-after-free on address 0x6150001cbce4 at pc 0x7f27c1fcdef9 bp 0x7fffe40475b0 sp 0x7fffe40475a8
+READ of size 1 at 0x6150001cbce4 thread T0
+    #0 0x7f27c1fcdef8 in Inkscape::UI::Widget::Canvas::redraw_area(int, int, int, int) src/ui/widget/canvas.cpp:175:9
+    #1 0x7f27c109b2d1 in redraw_if_visible(SPCanvasItem*) src/display/sp-canvas-item.cpp:161:27
+    #2 0x7f27c109afe9 in sp_canvas_item_dispose(_GObject*) src/display/sp-canvas-item.cpp:192:11
+    #3 0x7f27be50a839 in g_object_run_dispose (/usr/lib/libgobject-2.0.so.0+0x14839)
+    #4 0x7f27c109ad74 in sp_canvas_item_destroy(SPCanvasItem*) src/display/sp-canvas-item.cpp:171:5
+    #5 0x7f27c0fc4422 in Inkscape::CanvasGrid::~CanvasGrid() src/display/canvas-grid.cpp:165:9
+    #6 0x7f27c0fc7ac3 in Inkscape::CanvasXYGrid::~CanvasXYGrid() src/display/canvas-grid.cpp:448:1
+    #7 0x7f27c0fc7afd in Inkscape::CanvasXYGrid::~CanvasXYGrid() src/display/canvas-grid.cpp:446:1
+    #8 0x7f27c16ef27b in SPNamedView::release() src/object/sp-namedview.cpp:273:9
+    #9 0x7f27c170220c in SPObject::releaseReferences() src/object/sp-object.cpp:814:11
+    #10 0x7f27c1701f9c in SPObject::detach(SPObject*) src/object/sp-object.cpp:569:13
+    #11 0x7f27c1703225 in SPObject::release() src/object/sp-object.cpp:623:17
+    #12 0x7f27c164d3f4 in SPItem::release() src/object/sp-item.cpp:442:15
+    #13 0x7f27c165cdfb in SPLPEItem::release() src/object/sp-lpe-item.cpp:102:13
+    #14 0x7f27c1633dd4 in SPGroup::release() src/object/sp-item-group.cpp:80:16
+    #15 0x7f27c172a03a in SPRoot::release() src/object/sp-root.cpp:96:14
+    #16 0x7f27c170220c in SPObject::releaseReferences() src/object/sp-object.cpp:814:11
+    #17 0x7f27c22ba210 in SPDocument::~SPDocument() src/document.cpp:179:15
+    #18 0x7f27c22babcd in SPDocument::~SPDocument() src/document.cpp:148:27
+    #19 0x7f27c250efc1 in InkscapeApplication::document_close(SPDocument*) src/inkscape-application.cpp:285:9
+    #20 0x7f27c2511d1d in ConcreteInkscapeApplication<Gtk::Application>::destroy_window(InkscapeWindow*) src/inkscape-application.cpp:896:17
+```
+
+#### What should have happened?
+
+No crash.
+
+#### Inkscape Version and Operating System:
+
+- Inkscape Version: `Inkscape 1.1-dev (93759687eb, 2020-07-04, custom)`
+- Operating System: Arch Linux",464d8aa504bde64e55063b53f3d09cd63c657e1056452e0137eb5b1765d77d5b,ASI,3,matched_random
+2075,inkscape:2429:arcade,inkscape:2429,inkscape,arcade,inkscape_arcade,Cannot change units in Transform->move or Transform->Matrix dialog,"Cannot change units in Transform->move or Transform->Matrix dialog
+<!--
+    See our full bug reporting guidelines at https://inkscape.org/contribute/report-bugs/
+    Writing a good bug report will ensure we'll be able to help efficiently. 🙂
+-->
+
+#### Summary:
+<!-- Summarize the issue/suggestion concisely: -->
+
+Cannot change units in Transform->Move and Transform->Matrix dialogs
+
+#### Steps to reproduce:
+<!-- Describe what you did (step-by-step) so we can reproduce: -->
+
+- open Inkscape
+- open Transform dialog
+- select new unit from dropdown menu
+
+#### What happened?
+
+Unit is reset to ""Display units"" defined in ""Document Properties""
+
+#### What should have happened?
+
+Units should be changeable
+
+#### Version Info:
+
+```
+- Inkscape Version: Inkscape 1.2-dev (fd8ac3146, 2021-05-04, custom)
+- Operating System: Gentoo Linux
+- Operating System version:
+```
+
+<!--
+    ❤️ Thank you for filling in a new bug report, we appreciate the help! ❤️
+    Please be patient while we try to find the time to look into your issue.
+    Remember that Inkscape is developed by volunteers in their spare time, we'll try our best to respond to all reports.
+-->
+
+<!--
+    Please be careful when/after writing #  for example in logs, code, or versions of linux
+    - use inline code span - single backticks (`) before and after it, like this - `inbox#1618`
+    - use multi-line code block - triple backticks (```) to fence/enclose console logs
+    - attach long logs as a text file.
+-->","Cannot change units in Transform->move or Transform->Matrix dialog
+
+Cannot change units in Transform->move or Transform->Matrix dialog
+<!--
+    See our full bug reporting guidelines at https://inkscape.org/contribute/report-bugs/
+    Writing a good bug report will ensure we'll be able to help efficiently. 🙂
+-->
+
+#### Summary:
+<!-- Summarize the issue/suggestion concisely: -->
+
+Cannot change units in Transform->Move and Transform->Matrix dialogs
+
+#### Steps to reproduce:
+<!-- Describe what you did (step-by-step) so we can reproduce: -->
+
+- open Inkscape
+- open Transform dialog
+- select new unit from dropdown menu
+
+#### What happened?
+
+Unit is reset to ""Display units"" defined in ""Document Properties""
+
+#### What should have happened?
+
+Units should be changeable
+
+#### Version Info:
+
+```
+- Inkscape Version: Inkscape 1.2-dev (fd8ac3146, 2021-05-04, custom)
+- Operating System: Gentoo Linux
+- Operating System version:
+```
+
+<!--
+    ❤️ Thank you for filling in a new bug report, we appreciate the help! ❤️
+    Please be patient while we try to find the time to look into your issue.
+    Remember that Inkscape is developed by volunteers in their spare time, we'll try our best to respond to all reports.
+-->
+
+<!--
+    Please be careful when/after writing #  for example in logs, code, or versions of linux
+    - use inline code span - single backticks (`) before and after it, like this - `inbox#1618`
+    - use multi-line code block - triple backticks (```) to fence/enclose console logs
+    - attach long logs as a text file.
+-->",45de153fa6dfeb3bd6be62e3ecf7065224d4b8a27a72ce57f51651153178800c,NON_ASI,4,matched_random
+4296,shepard:459:arcade,shepard:459,shepard,arcade,shepard_arcade,PGVector service and repository implementation,PGVector service and repository implementation,"PGVector service and repository implementation
+
+PGVector service and repository implementation",c3928d1c50e7da971c52bdef463e1d2ff42b11125b435cd17577c17df07536d3,ASI,1,matched_random
+4309,shepard:481:arcade,shepard:481,shepard,arcade,shepard_arcade,Display semantic annotation chips,"Display semantic annotation chips
+# Feature Request
+
+## :goal: Goal
+
+As a `shepard frontend user` I want `to see the semantic annotations in the frontend in a highlighted form` so that `I can grasp them easily`.
+
+## :medal: Acceptance Criteria
+
+1. Annotations in their property + value combination are displayed as two-part chips
+   1. Property and value are labeled with the name of the linked IRI
+   2. Both property and value directly links to the IRI in the underlying repository so that on click you get redirected to the entry in the ontology
+2. Annotation chips are displayed:
+   1. in a new annotation section of collection
+   2. in a new annotation section in data object view
+   3. in a annotation column for all types of data references in the data reference content box
+   4. in a new annotation section in date reference detail view
+   5. in a new annotation column for all types of relationsships in the relationsship content box
+3. annotation chips always have a delete button on them for users who have writing rights on the collection
+   1. clicking it triggers a confirmation
+
+## :star: Visual Design
+
+https://www.figma.com/design/ivBPq71AuUl2ohFnrzHIKF/Visual-Design?node-id=2715-4436&t=rfLaLzQ8th1H4Lg2-0
+
+The entire figma page displays semantic annotations in their different environments. If you zoom out you can see the different sections.
+
+## :bomb: Out of Scope
+
+## :bulb: Hints
+
+## :thinking: Risks & Open Questions","Display semantic annotation chips
+
+Display semantic annotation chips
+# Feature Request
+
+## :goal: Goal
+
+As a `shepard frontend user` I want `to see the semantic annotations in the frontend in a highlighted form` so that `I can grasp them easily`.
+
+## :medal: Acceptance Criteria
+
+1. Annotations in their property + value combination are displayed as two-part chips
+   1. Property and value are labeled with the name of the linked IRI
+   2. Both property and value directly links to the IRI in the underlying repository so that on click you get redirected to the entry in the ontology
+2. Annotation chips are displayed:
+   1. in a new annotation section of collection
+   2. in a new annotation section in data object view
+   3. in a annotation column for all types of data references in the data reference content box
+   4. in a new annotation section in date reference detail view
+   5. in a new annotation column for all types of relationsships in the relationsship content box
+3. annotation chips always have a delete button on them for users who have writing rights on the collection
+   1. clicking it triggers a confirmation
+
+## :star: Visual Design
+
+https://www.figma.com/design/ivBPq71AuUl2ohFnrzHIKF/Visual-Design?node-id=2715-4436&t=rfLaLzQ8th1H4Lg2-0
+
+The entire figma page displays semantic annotations in their different environments. If you zoom out you can see the different sections.
+
+## :bomb: Out of Scope
+
+## :bulb: Hints
+
+## :thinking: Risks & Open Questions",d9676bb01acccc83d7224443f89a7d5b2a6392b721a2ce94d33d2cf55e83a165,NON_ASI,2,matched_random
+4209,shepard:574:arcade,shepard:574,shepard,arcade,shepard_arcade,add route to get metrics for single timeseries,add route to get metrics for single timeseries,"add route to get metrics for single timeseries
+
+add route to get metrics for single timeseries",4908330e08b35c54d9e098050c9256a35285b86fb96e8792c17183aee4b20895,ASI,3,matched_random
+4127,shepard:681:arcade,shepard:681,shepard,arcade,shepard_arcade,Remove old InfluxDB code,"Remove old InfluxDB code
+# Feature Request
+
+<!--
+Thanks for contributing to our project!
+Before creating a feature request, please read this first:
+
+- Use the template below
+- Check if there are related issues
+- Determine where the request should be reported:
+  https://gitlab.com/dlr-shepard/shepard/-/blob/main/CONTRIBUTING.md#how-can-i-contribute
+- Use a clear and descriptive title for the issue to identify the suggestion
+- For code snippets and logs please use Markdown code blocks:
+  https://docs.gitlab.com/ee/user/markdown.html
+
+-->
+
+## :goal_net: Goal
+
+As a `developer` I want `all InfluxDB code removed` so that `only TimescaleDB code must be maintained`.
+
+## :sports_medal: Acceptance Criteria
+
+1. No code related to InfluxDB is remaining in the code base
+2. All dependencies are cleaned
+3. The timescale-migration-preparation container is no longer built
+
+## :star: Special Testing hints
+
+Have a close look at the CI pipeline.
+
+## :bomb: Out of Scope
+
+## :bulb: Hints
+
+## :thinking_face: Risks & Open Questions","Remove old InfluxDB code
+
+Remove old InfluxDB code
+# Feature Request
+
+<!--
+Thanks for contributing to our project!
+Before creating a feature request, please read this first:
+
+- Use the template below
+- Check if there are related issues
+- Determine where the request should be reported:
+  https://gitlab.com/dlr-shepard/shepard/-/blob/main/CONTRIBUTING.md#how-can-i-contribute
+- Use a clear and descriptive title for the issue to identify the suggestion
+- For code snippets and logs please use Markdown code blocks:
+  https://docs.gitlab.com/ee/user/markdown.html
+
+-->
+
+## :goal_net: Goal
+
+As a `developer` I want `all InfluxDB code removed` so that `only TimescaleDB code must be maintained`.
+
+## :sports_medal: Acceptance Criteria
+
+1. No code related to InfluxDB is remaining in the code base
+2. All dependencies are cleaned
+3. The timescale-migration-preparation container is no longer built
+
+## :star: Special Testing hints
+
+Have a close look at the CI pipeline.
+
+## :bomb: Out of Scope
+
+## :bulb: Hints
+
+## :thinking_face: Risks & Open Questions",f627b27694b5615b060062cbf50b7dd5262ee3da9b94b093b666102d3a4d5ceb,NON_ASI,4,matched_random
+6054,shepard:681:arcan,shepard:681,shepard,arcan,shepard_arcan,Remove old InfluxDB code,"Remove old InfluxDB code
+# Feature Request
+
+<!--
+Thanks for contributing to our project!
+Before creating a feature request, please read this first:
+
+- Use the template below
+- Check if there are related issues
+- Determine where the request should be reported:
+  https://gitlab.com/dlr-shepard/shepard/-/blob/main/CONTRIBUTING.md#how-can-i-contribute
+- Use a clear and descriptive title for the issue to identify the suggestion
+- For code snippets and logs please use Markdown code blocks:
+  https://docs.gitlab.com/ee/user/markdown.html
+
+-->
+
+## :goal_net: Goal
+
+As a `developer` I want `all InfluxDB code removed` so that `only TimescaleDB code must be maintained`.
+
+## :sports_medal: Acceptance Criteria
+
+1. No code related to InfluxDB is remaining in the code base
+2. All dependencies are cleaned
+3. The timescale-migration-preparation container is no longer built
+
+## :star: Special Testing hints
+
+Have a close look at the CI pipeline.
+
+## :bomb: Out of Scope
+
+## :bulb: Hints
+
+## :thinking_face: Risks & Open Questions","Remove old InfluxDB code
+
+Remove old InfluxDB code
+# Feature Request
+
+<!--
+Thanks for contributing to our project!
+Before creating a feature request, please read this first:
+
+- Use the template below
+- Check if there are related issues
+- Determine where the request should be reported:
+  https://gitlab.com/dlr-shepard/shepard/-/blob/main/CONTRIBUTING.md#how-can-i-contribute
+- Use a clear and descriptive title for the issue to identify the suggestion
+- For code snippets and logs please use Markdown code blocks:
+  https://docs.gitlab.com/ee/user/markdown.html
+
+-->
+
+## :goal_net: Goal
+
+As a `developer` I want `all InfluxDB code removed` so that `only TimescaleDB code must be maintained`.
+
+## :sports_medal: Acceptance Criteria
+
+1. No code related to InfluxDB is remaining in the code base
+2. All dependencies are cleaned
+3. The timescale-migration-preparation container is no longer built
+
+## :star: Special Testing hints
+
+Have a close look at the CI pipeline.
+
+## :bomb: Out of Scope
+
+## :bulb: Hints
+
+## :thinking_face: Risks & Open Questions",f627b27694b5615b060062cbf50b7dd5262ee3da9b94b093b666102d3a4d5ceb,ASI,1,matched_random
+6323,shepard:231:arcan,shepard:231,shepard,arcan,shepard_arcan,Update MongoDB to the latest version,"Update MongoDB to the latest version
+# Feature Request
+
+<!--Thanks for contributing to our project!
+Before creating a feature request, please read this first:
+
+- Use the template below
+- Check if there are related issues
+- Determine where the request should be reported:
+  https://gitlab.com/dlr-shepard/shepard/-/blob/main/CONTRIBUTING.md#how-can-i-contribute
+- Use a clear and descriptive title for the issue to identify the suggestion
+- For code snippets and logs please use Markdown code blocks:
+  https://docs.gitlab.com/ee/user/markdown.html-->
+
+In ADR-008 we decided to stay with mongodb for further development, so we need to update mongodb to the latest version.
+
+## :goal: Goal
+
+As an `administrator` I want `to use the latest version of mongodb` so that `the deployment can use the latest bugfixes and performance improvements`.
+
+## :medal: Acceptance Criteria
+
+1. Migration is as seamless as possible
+2. Manual steps for administrators (if needed) required for migration are well documented
+3. No API changes
+
+## :star: Special Testing hints
+
+## :bomb: Out of Scope
+
+## :bulb: Hints
+
+- 4 to 5: https://www.mongodb.com/docs/manual/release-notes/5.0-upgrade-standalone/
+- 5 to 6: https://www.mongodb.com/docs/manual/release-notes/6.0-upgrade-standalone/
+- 6 to 7: https://www.mongodb.com/docs/manual/release-notes/7.0-upgrade-standalone/
+- also maybe this blog article can help: https://www.robertoboccadoro.com/2024/09/26/sametime-upgrading-mongodb-from-4-4-to-7/
+
+## :thinking: Risks & Open Questions
+
+- manual steps required: https://www.mongodb.com/docs/manual/reference/command/setFeatureCompatibilityVersion/#mongodb-dbcommand-dbcmd.setFeatureCompatibilityVersion
+  * we need to research how that flag affects the behaviour of MongoDB","Update MongoDB to the latest version
+
+Update MongoDB to the latest version
+# Feature Request
+
+<!--Thanks for contributing to our project!
+Before creating a feature request, please read this first:
+
+- Use the template below
+- Check if there are related issues
+- Determine where the request should be reported:
+  https://gitlab.com/dlr-shepard/shepard/-/blob/main/CONTRIBUTING.md#how-can-i-contribute
+- Use a clear and descriptive title for the issue to identify the suggestion
+- For code snippets and logs please use Markdown code blocks:
+  https://docs.gitlab.com/ee/user/markdown.html-->
+
+In ADR-008 we decided to stay with mongodb for further development, so we need to update mongodb to the latest version.
+
+## :goal: Goal
+
+As an `administrator` I want `to use the latest version of mongodb` so that `the deployment can use the latest bugfixes and performance improvements`.
+
+## :medal: Acceptance Criteria
+
+1. Migration is as seamless as possible
+2. Manual steps for administrators (if needed) required for migration are well documented
+3. No API changes
+
+## :star: Special Testing hints
+
+## :bomb: Out of Scope
+
+## :bulb: Hints
+
+- 4 to 5: https://www.mongodb.com/docs/manual/release-notes/5.0-upgrade-standalone/
+- 5 to 6: https://www.mongodb.com/docs/manual/release-notes/6.0-upgrade-standalone/
+- 6 to 7: https://www.mongodb.com/docs/manual/release-notes/7.0-upgrade-standalone/
+- also maybe this blog article can help: https://www.robertoboccadoro.com/2024/09/26/sametime-upgrading-mongodb-from-4-4-to-7/
+
+## :thinking: Risks & Open Questions
+
+- manual steps required: https://www.mongodb.com/docs/manual/reference/command/setFeatureCompatibilityVersion/#mongodb-dbcommand-dbcmd.setFeatureCompatibilityVersion
+  * we need to research how that flag affects the behaviour of MongoDB",a621c7a455d85785e57a89080f60d805c02ef9f6f441c18d28238e4ea8c18609,NON_ASI,2,matched_random
+6185,shepard:384:arcan,shepard:384,shepard,arcan,shepard_arcan,Create and delete relationsship in data object,"Create and delete relationsship in data object
+# Feature Request
+
+## :goal_net: Goal
+
+As a `shepard user` I need `dialogues` so that `i can create, delete and annotate relationsships in my data objects`.
+
+## :sports_medal: Acceptance Criteria
+
+1. there is a plus icon at the relationsship content box that allows to add relationsships :white_check_mark: 
+   1. after click on add button the dialogue opens and displays a selection between ""predecessor"", ""sucessor"" and ""custom"" :white_check_mark:
+   1. Predecessor / Successor show an input field that enables to type name or ID of the data object with autocomplete enabled :white_check_mark:
+      1. save button only available as soon as data object selected. :white_check_mark:
+   1. For ""Custom"" relationsship there is a optional input field that allows to enter any string as ""Custom Relationsship type"" :white_check_mark:
+      1. there is a dropdown that requires the user select if the relationsship links an URL, Collection or data object :white_check_mark:
+      1. for collections and data objects there is an auto-fill input field that allows to select a collection / data object to be linked :white_check_mark:
+      1. Custom relationsships have a mandatory filed called ""name"". it shall be prefilled automatically with the name of the collection / data object selected / page title for URL. the field shall be updated when the previous field is filled and can be edited manually by user :white_check_mark:
+      1. The field ""relationsship"" that is already modeled for Data Object and Collection relationsships shall be added to the URL relationsships as well, so that the user can name the meaning of the URL. :white_check_mark:
+  
+2. existing relationsships show a trash can icon in the line to delete the relationsship. Clicking so deletes the relationsship after confirmation. :white_check_mark:
+
+
+## :star: Visual Design
+
+
+Delete: https://www.figma.com/design/ivBPq71AuUl2ohFnrzHIKF/Visual-Design?node-id=1575-19336&m=dev 
+
+Create: https://www.figma.com/design/ivBPq71AuUl2ohFnrzHIKF/Visual-Design?node-id=1551-18795&m=dev
+
+## :bomb: Out of Scope
+3. Data object reference, collection reference and URL reference can be annotaten and thus show a semantic annotation icon in line that leads to #420  ==> needs to be done with story #420
+
+## :bulb: Hints
+
+Backend needs to be extended to allow an operation to add successor directly - 
+
+## :thinking_face: Risks & Open Questions","Create and delete relationsship in data object
+
+Create and delete relationsship in data object
+# Feature Request
+
+## :goal_net: Goal
+
+As a `shepard user` I need `dialogues` so that `i can create, delete and annotate relationsships in my data objects`.
+
+## :sports_medal: Acceptance Criteria
+
+1. there is a plus icon at the relationsship content box that allows to add relationsships :white_check_mark: 
+   1. after click on add button the dialogue opens and displays a selection between ""predecessor"", ""sucessor"" and ""custom"" :white_check_mark:
+   1. Predecessor / Successor show an input field that enables to type name or ID of the data object with autocomplete enabled :white_check_mark:
+      1. save button only available as soon as data object selected. :white_check_mark:
+   1. For ""Custom"" relationsship there is a optional input field that allows to enter any string as ""Custom Relationsship type"" :white_check_mark:
+      1. there is a dropdown that requires the user select if the relationsship links an URL, Collection or data object :white_check_mark:
+      1. for collections and data objects there is an auto-fill input field that allows to select a collection / data object to be linked :white_check_mark:
+      1. Custom relationsships have a mandatory filed called ""name"". it shall be prefilled automatically with the name of the collection / data object selected / page title for URL. the field shall be updated when the previous field is filled and can be edited manually by user :white_check_mark:
+      1. The field ""relationsship"" that is already modeled for Data Object and Collection relationsships shall be added to the URL relationsships as well, so that the user can name the meaning of the URL. :white_check_mark:
+  
+2. existing relationsships show a trash can icon in the line to delete the relationsship. Clicking so deletes the relationsship after confirmation. :white_check_mark:
+
+
+## :star: Visual Design
+
+
+Delete: https://www.figma.com/design/ivBPq71AuUl2ohFnrzHIKF/Visual-Design?node-id=1575-19336&m=dev 
+
+Create: https://www.figma.com/design/ivBPq71AuUl2ohFnrzHIKF/Visual-Design?node-id=1551-18795&m=dev
+
+## :bomb: Out of Scope
+3. Data object reference, collection reference and URL reference can be annotaten and thus show a semantic annotation icon in line that leads to #420  ==> needs to be done with story #420
+
+## :bulb: Hints
+
+Backend needs to be extended to allow an operation to add successor directly - 
+
+## :thinking_face: Risks & Open Questions",b407a05aa2ef7de0d78c90c3e65080fa09d88b9a28311b8309ae3c99a47b5472,ASI,3,matched_random
+6161,shepard:319:arcan,shepard:319,shepard,arcan,shepard_arcan,Delete Data objects,"Delete Data objects
+# Feature Request
+
+<!--Thanks for contributing to our project!
+Before creating a feature request, please read this first:
+
+- Use the template below
+- Check if there are related issues
+- Determine where the request should be reported:
+  https://gitlab.com/dlr-shepard/shepard/-/blob/main/CONTRIBUTING.md#how-can-i-contribute
+- Use a clear and descriptive title for the issue to identify the suggestion
+- For code snippets and logs please use Markdown code blocks:
+  https://docs.gitlab.com/ee/user/markdown.html-->
+
+## :goal_net: Goal
+
+As a frontend user I want to be able to delete data objects in the frontend so that I can get rid of unused elements.
+
+## :sports_medal: Acceptance Criteria
+
+1. Delete functionality is hidden in a context menu. Delete functionality runs the ""soft delete"" functionality that the backend currently implements
+2. There is a confirmation dialogue 
+
+
+
+## :star: Visual Design
+
+https://www.figma.com/design/ivBPq71AuUl2ohFnrzHIKF/Visual-Design?node-id=974-15406&m=dev
+
+## :bomb: Out of Scope
+
+- Option to delete with all of its children is a desired functionality that can be added later
+- in case of deletion of a parent, it would be more intuitive for the user if the children then inherit their grandparent instead of having no parent at all, not strictly necessairy for MVP
+
+## :bulb: Hints
+
+## :thinking_face: Risks & Open Questions","Delete Data objects
+
+Delete Data objects
+# Feature Request
+
+<!--Thanks for contributing to our project!
+Before creating a feature request, please read this first:
+
+- Use the template below
+- Check if there are related issues
+- Determine where the request should be reported:
+  https://gitlab.com/dlr-shepard/shepard/-/blob/main/CONTRIBUTING.md#how-can-i-contribute
+- Use a clear and descriptive title for the issue to identify the suggestion
+- For code snippets and logs please use Markdown code blocks:
+  https://docs.gitlab.com/ee/user/markdown.html-->
+
+## :goal_net: Goal
+
+As a frontend user I want to be able to delete data objects in the frontend so that I can get rid of unused elements.
+
+## :sports_medal: Acceptance Criteria
+
+1. Delete functionality is hidden in a context menu. Delete functionality runs the ""soft delete"" functionality that the backend currently implements
+2. There is a confirmation dialogue 
+
+
+
+## :star: Visual Design
+
+https://www.figma.com/design/ivBPq71AuUl2ohFnrzHIKF/Visual-Design?node-id=974-15406&m=dev
+
+## :bomb: Out of Scope
+
+- Option to delete with all of its children is a desired functionality that can be added later
+- in case of deletion of a parent, it would be more intuitive for the user if the children then inherit their grandparent instead of having no parent at all, not strictly necessairy for MVP
+
+## :bulb: Hints
+
+## :thinking_face: Risks & Open Questions",ba609b605023aeeaf213da96fbf7692fb7f25e1e7a3586f3b8700f957d19b74f,NON_ASI,4,matched_random
+3398,stackgres:879:arcade,stackgres:879,stackgres,arcade,stackgres_arcade,Remove workaround classes of Kubernetes Client,"Remove workaround classes of Kubernetes Client
+The current version of KC 5.1.1 have an issue patching Services with `ExternalName`, the fix will be available on the next version 5.2.0 of KC, when that version is released it could be updated and remove the workaround fix for the services used in StackGres.","Remove workaround classes of Kubernetes Client
+
+Remove workaround classes of Kubernetes Client
+The current version of KC 5.1.1 have an issue patching Services with `ExternalName`, the fix will be available on the next version 5.2.0 of KC, when that version is released it could be updated and remove the workaround fix for the services used in StackGres.",032488424c1a64923fe2f5a7e5a51b7df0230814a0b1e8355ac0dcd78bc97263,ASI,1,matched_random
+2902,stackgres:2126:arcade,stackgres:2126,stackgres,arcade,stackgres_arcade,Object Storage selector on Cluster form shows all Object Storages from all Namespaces,"Object Storage selector on Cluster form shows all Object Storages from all Namespaces
+### Summary
+When selecting an Object Storage on the Create Cluster form, the dropdown displays all Object Storages from all Namespaces. If the selected Object Storage is from a different Namespace, the Cluster creation will fail.
+
+#### Steps to reproduce
+1. Create Object Storages on different Namespaces.
+2. Go to Create Cluster, Backups step. Select an Object Storage.
+3. The dropdown shows a list of all Object Storages from all Namespaces.
+
+### Expected Behaviour
+Only Object Storages from the Namespace the User is on should be shown.
+
+### Possible Solution
+Object Storages should be filtered by Namespace on the Create Cluster form.
+
+### Environment
+- StackGres version: 1\.4.0","Object Storage selector on Cluster form shows all Object Storages from all Namespaces
+
+Object Storage selector on Cluster form shows all Object Storages from all Namespaces
+### Summary
+When selecting an Object Storage on the Create Cluster form, the dropdown displays all Object Storages from all Namespaces. If the selected Object Storage is from a different Namespace, the Cluster creation will fail.
+
+#### Steps to reproduce
+1. Create Object Storages on different Namespaces.
+2. Go to Create Cluster, Backups step. Select an Object Storage.
+3. The dropdown shows a list of all Object Storages from all Namespaces.
+
+### Expected Behaviour
+Only Object Storages from the Namespace the User is on should be shown.
+
+### Possible Solution
+Object Storages should be filtered by Namespace on the Create Cluster form.
+
+### Environment
+- StackGres version: 1\.4.0",0ea24d452224667f2a7e4431007898816759c55e8b1b40d37acfeb3ed19eed30,NON_ASI,2,matched_random
+3558,stackgres:1174:arcade,stackgres:1174,stackgres,arcade,stackgres_arcade,Allow more customization for pgbouncer,"Allow more customization for pgbouncer
+### Problem to solve
+
+Currently it is not possible to customize a little bit more pgbouncer deployment, you can only specify the parameters to modify that correspond to `[pgbouncer]` section.
+
+Pooling configuration in SG:
+
+```
+apiVersion: stackgres.io/v1beta1
+kind: SGPoolingConfig
+metadata:
+  name: poolconfig
+spec:
+  pgBouncer:
+    pgbouncer.ini:
+      pool_mode: session
+      default_pool_size: '300'
+...
+```
+
+This generate a configuration file like:
+
+```
+$ kubectl exec -it -n gitlab-db gitlab-db-0 -c pgbouncer -- cat /etc/pgbouncer/pgbouncer.ini
+[databases]
+ * = port = 5432
+
+[pgbouncer]
+listen_port = 6432
+unix_socket_dir = /var/run/postgresql
+stats_users = postgres
+ignore_startup_parameters = extra_float_digits
+auth_type = md5
+max_db_connections = 0
+pool_mode = session
+auth_query = SELECT usename, passwd FROM pg_shadow WHERE usename=$1
+application_name_add_host = 1
+log_disconnections = 1
+max_client_conn = 2000
+log_stats = 1
+log_connections = 1
+default_pool_size = 20
+max_user_connections = 0
+auth_user = authenticator
+listen_addr = 127.0.0.1
+admin_users = postgres
+```
+
+But pgbouncer has three main sections:
+
+1- `[databases]`: To specify database connections.
+
+2- `[users]`: To add some custom configuration for some users
+
+3- `[pgbouncer]` :  To add pgbouncer configurations parameters 
+
+
+And right now ong the the 3 section is allowed to be modified.
+
+### Further details
+
+In some environments it is required to add some user restrictions like amount of connectios allowed for a user or using different pool mode like : 
+
+```
+[users]
+user1 = pool_mode=transaction max_user_connections=20
+user2 = pool_mode=session max_user_connections=50
+```
+
+### Proposal
+
+Add to SGPoolingConfig CRD the options to configure the 3 differents sections:
+
+```
+apiVersion: stackgres.io/v1beta1
+kind: SGPoolingConfig
+metadata:
+  name: poolconfig
+spec:
+  pgBouncer:
+    pgbouncer.ini:
+      databases:  # optional and if not added * = port = 5432 should be the default
+        gitlab:
+          host: gitlab-db
+          port: 5433
+          dbname: gitlab
+          auth_user: pgbouncer
+          pool_size: 100
+       users_custom_config:   #Optional
+          user1:
+            pool_mode: transaction
+            max_user_connections: 50
+          user2:
+            pool_mode: session
+            max_user_connections: 100
+       parameters:
+         pool_mode: session
+         default_pool_size: '20'
+         max_db_connections: 200
+```
+
+And this should generate a configuration like: 
+
+```
+$cat /etc/pgbouncer/pgbouncer.ini
+[databases]
+gitlab = host=localhost port=5432  auth_user=pgbouncer dbname=gitlab pool_size=100
+
+[users]
+user1 = pool_mode=transaction max_user_connections=50
+user2 = pool_mode=session max_user_connections=100
+
+[pgbouncer]
+default_pool_size = 50
+max_db_connections = 200
+pool_mode = session
+listen_addr = 127.0.0.1
+...
+```
+
+### Links / references
+
+https://www.pgbouncer.org/config.html","Allow more customization for pgbouncer
+
+Allow more customization for pgbouncer
+### Problem to solve
+
+Currently it is not possible to customize a little bit more pgbouncer deployment, you can only specify the parameters to modify that correspond to `[pgbouncer]` section.
+
+Pooling configuration in SG:
+
+```
+apiVersion: stackgres.io/v1beta1
+kind: SGPoolingConfig
+metadata:
+  name: poolconfig
+spec:
+  pgBouncer:
+    pgbouncer.ini:
+      pool_mode: session
+      default_pool_size: '300'
+...
+```
+
+This generate a configuration file like:
+
+```
+$ kubectl exec -it -n gitlab-db gitlab-db-0 -c pgbouncer -- cat /etc/pgbouncer/pgbouncer.ini
+[databases]
+ * = port = 5432
+
+[pgbouncer]
+listen_port = 6432
+unix_socket_dir = /var/run/postgresql
+stats_users = postgres
+ignore_startup_parameters = extra_float_digits
+auth_type = md5
+max_db_connections = 0
+pool_mode = session
+auth_query = SELECT usename, passwd FROM pg_shadow WHERE usename=$1
+application_name_add_host = 1
+log_disconnections = 1
+max_client_conn = 2000
+log_stats = 1
+log_connections = 1
+default_pool_size = 20
+max_user_connections = 0
+auth_user = authenticator
+listen_addr = 127.0.0.1
+admin_users = postgres
+```
+
+But pgbouncer has three main sections:
+
+1- `[databases]`: To specify database connections.
+
+2- `[users]`: To add some custom configuration for some users
+
+3- `[pgbouncer]` :  To add pgbouncer configurations parameters 
+
+
+And right now ong the the 3 section is allowed to be modified.
+
+### Further details
+
+In some environments it is required to add some user restrictions like amount of connectios allowed for a user or using different pool mode like : 
+
+```
+[users]
+user1 = pool_mode=transaction max_user_connections=20
+user2 = pool_mode=session max_user_connections=50
+```
+
+### Proposal
+
+Add to SGPoolingConfig CRD the options to configure the 3 differents sections:
+
+```
+apiVersion: stackgres.io/v1beta1
+kind: SGPoolingConfig
+metadata:
+  name: poolconfig
+spec:
+  pgBouncer:
+    pgbouncer.ini:
+      databases:  # optional and if not added * = port = 5432 should be the default
+        gitlab:
+          host: gitlab-db
+          port: 5433
+          dbname: gitlab
+          auth_user: pgbouncer
+          pool_size: 100
+       users_custom_config:   #Optional
+          user1:
+            pool_mode: transaction
+            max_user_connections: 50
+          user2:
+            pool_mode: session
+            max_user_connections: 100
+       parameters:
+         pool_mode: session
+         default_pool_size: '20'
+         max_db_connections: 200
+```
+
+And this should generate a configuration like: 
+
+```
+$cat /etc/pgbouncer/pgbouncer.ini
+[databases]
+gitlab = host=localhost port=5432  auth_user=pgbouncer dbname=gitlab pool_size=100
+
+[users]
+user1 = pool_mode=transaction max_user_connections=50
+user2 = pool_mode=session max_user_connections=100
+
+[pgbouncer]
+default_pool_size = 50
+max_db_connections = 200
+pool_mode = session
+listen_addr = 127.0.0.1
+...
+```
+
+### Links / references
+
+https://www.pgbouncer.org/config.html",289c863ad200cf991ac3bd58e4487acd46d0ce1b6531266c6b067b71d17fc038,ASI,3,matched_random
+3437,stackgres:937:arcade,stackgres:937,stackgres,arcade,stackgres_arcade,Improve Grafana tab on the web console when no pods info is available,"Improve Grafana tab on the web console when no pods info is available
+Backport to ~""target_version::0.9.6"" -> #1086 
+
+--
+
+### Summary
+
+When one cluster has `grafanaEmbeeded` and no pods are available yet, the Grafana tab is shown on the web console even though no data can yet be pulled from it because there are no IPs to match for the pods.
+
+
+#### Steps to reproduce
+
+- Enter the web console
+- Choose a cluster with no pods info available
+- Enter the Grafana tab for the specified cluster
+- No info is shown and an the following error message can be found on the browser console `Cannot read property 'ip' of undefined`
+
+
+### Expected Behaviour
+
+If no pod's info is available, provide the user with a message like `No pods yet available`
+
+
+### Environment
+
+- StackGres version: `0.9.5` / `1.0.0-alpha1`","Improve Grafana tab on the web console when no pods info is available
+
+Improve Grafana tab on the web console when no pods info is available
+Backport to ~""target_version::0.9.6"" -> #1086 
+
+--
+
+### Summary
+
+When one cluster has `grafanaEmbeeded` and no pods are available yet, the Grafana tab is shown on the web console even though no data can yet be pulled from it because there are no IPs to match for the pods.
+
+
+#### Steps to reproduce
+
+- Enter the web console
+- Choose a cluster with no pods info available
+- Enter the Grafana tab for the specified cluster
+- No info is shown and an the following error message can be found on the browser console `Cannot read property 'ip' of undefined`
+
+
+### Expected Behaviour
+
+If no pod's info is available, provide the user with a message like `No pods yet available`
+
+
+### Environment
+
+- StackGres version: `0.9.5` / `1.0.0-alpha1`",c70ae21fcd84d11a0d65d1c5466da5870249502c291abd7e56639a8e93a62081,NON_ASI,4,matched_random
+5063,stackgres:2029:arcan,stackgres:2029,stackgres,arcan,stackgres_arcan,Increase memory limit for prometheus-postgres-exporter container to 256Mi,"Increase memory limit for prometheus-postgres-exporter container to 256Mi
+We saw that the current minimum size of 64Mi for prometheus-postgres-exporter container memory limit is not enough in some real life usage scenario. The amount of memory measured for such container reached a maximum of 107Mi. We should increase the default memory limit to 256Mi for prometheus-postgres-exporter in order to prevent OOM in more cases. This does not means that users will have to increase it in some edge cases. 
+
+## Implementation plan
+
+Set memory limit to 256Mi for container prometheus-postgres-exporter in class `io.stackgres.common.StackGresContainer`.
+
+## Acceptance Criteria
+
+* [ ] Implement the solution
+* [ ] Test the implementation","Increase memory limit for prometheus-postgres-exporter container to 256Mi
+
+Increase memory limit for prometheus-postgres-exporter container to 256Mi
+We saw that the current minimum size of 64Mi for prometheus-postgres-exporter container memory limit is not enough in some real life usage scenario. The amount of memory measured for such container reached a maximum of 107Mi. We should increase the default memory limit to 256Mi for prometheus-postgres-exporter in order to prevent OOM in more cases. This does not means that users will have to increase it in some edge cases. 
+
+## Implementation plan
+
+Set memory limit to 256Mi for container prometheus-postgres-exporter in class `io.stackgres.common.StackGresContainer`.
+
+## Acceptance Criteria
+
+* [ ] Implement the solution
+* [ ] Test the implementation",b9f61e681b45c01df852ee09e7c8448a1c4a1371b898df143f0df7666dedfe03,ASI,1,matched_random
+5253,stackgres:716:arcan,stackgres:716,stackgres,arcan,stackgres_arcan,Update Quarkus to 1.12.0.Final,"Update Quarkus to 1.12.0.Final
+See https://quarkus.io/blog/quarkus-1-12-0-final-released/
+* https://github.com/quarkusio/quarkus/wiki/Migration-Guide-1.12
+
+The biggest change is the update to Kubernetes-Client 5.x
+* https://github.com/fabric8io/kubernetes-client/blob/master/doc/MIGRATION-v5.md","Update Quarkus to 1.12.0.Final
+
+Update Quarkus to 1.12.0.Final
+See https://quarkus.io/blog/quarkus-1-12-0-final-released/
+* https://github.com/quarkusio/quarkus/wiki/Migration-Guide-1.12
+
+The biggest change is the update to Kubernetes-Client 5.x
+* https://github.com/fabric8io/kubernetes-client/blob/master/doc/MIGRATION-v5.md",c2c841eef065ff8c14467af20be288f260816144da787bc37c9b18c705b55c57,NON_ASI,2,matched_random
+5496,stackgres:1193:arcan,stackgres:1193,stackgres,arcan,stackgres_arcan,Document how to tweak and upgrade SGDistributedLogs,"Document how to tweak and upgrade SGDistributedLogs
+Create the following sections under Administration:
+
+* [ ] Document how to tweak an `SGDistributedLogs` by using `stackgres.io/reconciliation-pause` annotation to change the Pod used resources or the Postgres configuration. This section should include a list of specific options a user could touch to avoid break functionality.
+
+Also, the current documentation for upgrading distributed logs is not working since distributed logs database structure changes from `0.9` to `1.0`.
+
+In particular:
+
+* timescaledb extensions version 1.7.4 is not created
+* Tables `log_patroni` and `log_postgres` are not timescale hypertables
+
+To make the operation more portable we should create a runbook to:
+
+1. Create a new instance of distributed logs
+1. Point the `SGCluster`s to the new distirbtued logs
+1. Move all the data from the old instance to the new one with `kubectl exec` + `pg_dumpall` + `psql`-
+1. Delete the old distributed logs","Document how to tweak and upgrade SGDistributedLogs
+
+Document how to tweak and upgrade SGDistributedLogs
+Create the following sections under Administration:
+
+* [ ] Document how to tweak an `SGDistributedLogs` by using `stackgres.io/reconciliation-pause` annotation to change the Pod used resources or the Postgres configuration. This section should include a list of specific options a user could touch to avoid break functionality.
+
+Also, the current documentation for upgrading distributed logs is not working since distributed logs database structure changes from `0.9` to `1.0`.
+
+In particular:
+
+* timescaledb extensions version 1.7.4 is not created
+* Tables `log_patroni` and `log_postgres` are not timescale hypertables
+
+To make the operation more portable we should create a runbook to:
+
+1. Create a new instance of distributed logs
+1. Point the `SGCluster`s to the new distirbtued logs
+1. Move all the data from the old instance to the new one with `kubectl exec` + `pg_dumpall` + `psql`-
+1. Delete the old distributed logs",539e7db08787838f866dfe6c611eeb7c75dba7614df7da427637007f49c3b592,ASI,3,matched_random
+5312,stackgres:855:arcan,stackgres:855,stackgres,arcan,stackgres_arcan,Web console sidebar shows CRD containers border even if no CRD exists,"Web console sidebar shows CRD containers border even if no CRD exists
+When hovering the different options on the web console's sidebar, even though no CRDs might be present for the selected kind and namespace, the list to the right is loaded and odd borders appear next to the sidebar.
+
+![Captura_de_pantalla_2021-02-18_a_la_s__19.17.53](/uploads/c8af1ab10f4cdd00bb0bf606f59f19cf/Captura_de_pantalla_2021-02-18_a_la_s__19.17.53.png)","Web console sidebar shows CRD containers border even if no CRD exists
+
+Web console sidebar shows CRD containers border even if no CRD exists
+When hovering the different options on the web console's sidebar, even though no CRDs might be present for the selected kind and namespace, the list to the right is loaded and odd borders appear next to the sidebar.
+
+![Captura_de_pantalla_2021-02-18_a_la_s__19.17.53](/uploads/c8af1ab10f4cdd00bb0bf606f59f19cf/Captura_de_pantalla_2021-02-18_a_la_s__19.17.53.png)",1580a4b3cb38a9049837ce095da6a113afed0a8a30dc844de7d63b6c65e67cc7,NON_ASI,4,matched_random

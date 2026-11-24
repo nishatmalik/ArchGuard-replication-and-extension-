@@ -1,0 +1,6 @@
+project,detector,accuracy,precision,recall,f1
+inkscape,arcade,0.8879884138113612,0.0,0.0,0.0
+shepard,arcade,0.864309812097536,0.0,0.0,0.0
+shepard,arcan,0.6489438415918547,0.0,0.0,0.0
+stackgres,arcade,0.8228564325835148,0.0,0.0,0.0
+stackgres,arcan,0.8482544447370157,0.0,0.0,0.0

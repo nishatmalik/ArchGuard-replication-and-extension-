@@ -1,0 +1,4 @@
+baseline,comparison,valid_pairs,NON_ASI_to_ASI,ASI_to_NON_ASI,unchanged
+E0-F,E3,99,74,0,25
+E1,E3,99,52,0,47
+E2,E3,99,48,0,51

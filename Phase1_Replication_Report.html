@@ -1,0 +1,769 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ArchGuard Replication Report</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 24px;
+    line-height: 1.65;
+    color: #253247;
+}
+h1, h2 { color: #17395c; }
+h2 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+    font-size: 13px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 9px;
+    text-align: left;
+}
+th {
+    background: #17395c;
+    color: white;
+}
+tr:nth-child(even) {
+    background: #f4f6f9;
+}
+</style>
+</head>
+<body>
+<h1>Improving LLM-Based Early Warning of Architectural Decay Using Prompt Engineering and Retrieval: A Replication and Extension of ArchGuard</h1>
+<h2>Phase 1: Replication Report</h2>
+<h3>Executive Summary</h3>
+<p>This study investigates early warning of architectural decay
+through the prediction of architectural smell-inducing (ASI)
+software issues.</p>
+<p>The replication reconstructs the classification datasets and
+reproduces the supervised SVM baseline using the released
+OpenAI embeddings and detector-specific ground-truth labels.</p>
+<p>The SVM results match the previously recorded published
+F1-score references at three-decimal reporting precision.</p>
+<p>The released GPT-5-mini prediction cache exhibits zero
+positive-class recall and F1-score. This result characterizes
+the archived predictions and does not establish the
+performance of fresh GPT-5-mini inference.</p>
+<h2>1. Dataset Characteristics</h2>
+<p>The classification dataset contains 6,390
+detector-specific records corresponding to 4,463
+unique issues across three software projects.</p>
+<p>There are 940 ASI and 5,450
+non-ASI records. The overall ASI prevalence is
+14.71%.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">project</th>
+<th style="text-align: left;">detector</th>
+<th style="text-align: right;">total_records</th>
+<th style="text-align: right;">ASI</th>
+<th style="text-align: right;">non_ASI</th>
+<th style="text-align: right;">ASI_percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">inkscape</td>
+<td style="text-align: left;">arcade</td>
+<td style="text-align: right;">2536</td>
+<td style="text-align: right;">258</td>
+<td style="text-align: right;">2278</td>
+<td style="text-align: right;">10.1735</td>
+</tr>
+<tr>
+<td style="text-align: left;">shepard</td>
+<td style="text-align: left;">arcade</td>
+<td style="text-align: right;">346</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">13.2948</td>
+</tr>
+<tr>
+<td style="text-align: left;">shepard</td>
+<td style="text-align: left;">arcan</td>
+<td style="text-align: right;">346</td>
+<td style="text-align: right;">120</td>
+<td style="text-align: right;">226</td>
+<td style="text-align: right;">34.6821</td>
+</tr>
+<tr>
+<td style="text-align: left;">stackgres</td>
+<td style="text-align: left;">arcade</td>
+<td style="text-align: right;">1581</td>
+<td style="text-align: right;">279</td>
+<td style="text-align: right;">1302</td>
+<td style="text-align: right;">17.6471</td>
+</tr>
+<tr>
+<td style="text-align: left;">stackgres</td>
+<td style="text-align: left;">arcan</td>
+<td style="text-align: right;">1581</td>
+<td style="text-align: right;">237</td>
+<td style="text-align: right;">1344</td>
+<td style="text-align: right;">14.9905</td>
+</tr>
+</tbody>
+</table>
+<h2>2. Experimental Methodology</h2>
+<ul>
+<li>Five project-detector configurations.</li>
+<li>Two repetitions of five-fold stratified cross-validation.</li>
+<li>Fifty SVM fold evaluations in total.</li>
+<li>Released text-embedding-3-small embeddings.</li>
+<li>RBF support vector machine.</li>
+<li>Random undersampling restricted to training folds.</li>
+<li>Positive-class precision, recall and F1-score.</li>
+<li>Matched-record analysis for archived LLM comparisons.</li>
+</ul>
+<p>The original embedding input identity and exact original fold
+identity remain independently unverified.</p>
+<h2>3. SVM Replication Results</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">detector</th>
+<th style="text-align: right;">precision</th>
+<th style="text-align: right;">recall</th>
+<th style="text-align: right;">f1</th>
+<th style="text-align: right;">published_reference_f1</th>
+<th style="text-align: right;">absolute_f1_difference</th>
+<th style="text-align: left;">matches_reporting_precision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">arcade</td>
+<td style="text-align: right;">0.2428</td>
+<td style="text-align: right;">0.7098</td>
+<td style="text-align: right;">0.36</td>
+<td style="text-align: right;">0.36</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">True</td>
+</tr>
+<tr>
+<td style="text-align: left;">arcan</td>
+<td style="text-align: right;">0.4048</td>
+<td style="text-align: right;">0.7412</td>
+<td style="text-align: right;">0.5058</td>
+<td style="text-align: right;">0.506</td>
+<td style="text-align: right;">0.0002</td>
+<td style="text-align: left;">True</td>
+</tr>
+</tbody>
+</table>
+<p>The numerical reproduction matches the recorded published
+F1-score references at three decimal places.</p>
+<h2>4. Matched Baseline Evaluation</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">project</th>
+<th style="text-align: left;">detector</th>
+<th style="text-align: left;">cohort</th>
+<th style="text-align: right;">accuracy_svm</th>
+<th style="text-align: right;">accuracy_llm</th>
+<th style="text-align: right;">f1_svm</th>
+<th style="text-align: right;">f1_llm</th>
+<th style="text-align: right;">recall_svm</th>
+<th style="text-align: right;">recall_llm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">inkscape</td>
+<td style="text-align: left;">arcade</td>
+<td style="text-align: left;">cached_matched</td>
+<td style="text-align: right;">0.7063</td>
+<td style="text-align: right;">0.888</td>
+<td style="text-align: right;">0.3159</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.6013</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">shepard</td>
+<td style="text-align: left;">arcade</td>
+<td style="text-align: left;">cached_matched</td>
+<td style="text-align: right;">0.6703</td>
+<td style="text-align: right;">0.8643</td>
+<td style="text-align: right;">0.3754</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.7256</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">shepard</td>
+<td style="text-align: left;">arcan</td>
+<td style="text-align: left;">cached_matched</td>
+<td style="text-align: right;">0.6813</td>
+<td style="text-align: right;">0.6489</td>
+<td style="text-align: right;">0.6138</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.7145</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">stackgres</td>
+<td style="text-align: left;">arcade</td>
+<td style="text-align: left;">cached_matched</td>
+<td style="text-align: right;">0.6022</td>
+<td style="text-align: right;">0.8229</td>
+<td style="text-align: right;">0.4173</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.8029</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">stackgres</td>
+<td style="text-align: left;">arcan</td>
+<td style="text-align: left;">cached_matched</td>
+<td style="text-align: right;">0.6553</td>
+<td style="text-align: right;">0.8483</td>
+<td style="text-align: right;">0.4015</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.7658</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">inkscape</td>
+<td style="text-align: left;">arcade</td>
+<td style="text-align: left;">valid_matched</td>
+<td style="text-align: right;">0.7085</td>
+<td style="text-align: right;">0.891</td>
+<td style="text-align: right;">0.3072</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.5913</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">shepard</td>
+<td style="text-align: left;">arcade</td>
+<td style="text-align: left;">valid_matched</td>
+<td style="text-align: right;">0.6987</td>
+<td style="text-align: right;">0.9022</td>
+<td style="text-align: right;">0.2986</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.6529</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">shepard</td>
+<td style="text-align: left;">arcan</td>
+<td style="text-align: left;">valid_matched</td>
+<td style="text-align: right;">0.7283</td>
+<td style="text-align: right;">0.6826</td>
+<td style="text-align: right;">0.6472</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.7701</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">stackgres</td>
+<td style="text-align: left;">arcade</td>
+<td style="text-align: left;">valid_matched</td>
+<td style="text-align: right;">0.6135</td>
+<td style="text-align: right;">0.8307</td>
+<td style="text-align: right;">0.4103</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.7938</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">stackgres</td>
+<td style="text-align: left;">arcan</td>
+<td style="text-align: left;">valid_matched</td>
+<td style="text-align: right;">0.6711</td>
+<td style="text-align: right;">0.8588</td>
+<td style="text-align: right;">0.3863</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.7374</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<h2>5. Archived LLM Response Reliability</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cached predictions</td>
+<td style="text-align: right;">6,042</td>
+</tr>
+<tr>
+<td>Version-excluded records</td>
+<td style="text-align: right;">348</td>
+</tr>
+<tr>
+<td>Valid responses</td>
+<td style="text-align: right;">5,426</td>
+</tr>
+<tr>
+<td>Invalid responses</td>
+<td style="text-align: right;">616</td>
+</tr>
+<tr>
+<td>Empty responses</td>
+<td style="text-align: right;">606</td>
+</tr>
+<tr>
+<td>Valid response rate</td>
+<td style="text-align: right;">89.80%</td>
+</tr>
+<tr>
+<td>End-to-end coverage</td>
+<td style="text-align: right;">84.91%</td>
+</tr>
+<tr>
+<td>Actual ASI among invalid responses</td>
+<td style="text-align: right;">157</td>
+</tr>
+<tr>
+<td>True positives</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>False positives</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td>False negatives</td>
+<td style="text-align: right;">929</td>
+</tr>
+<tr>
+<td>True negatives</td>
+<td style="text-align: right;">5111</td>
+</tr>
+</tbody>
+</table>
+<p>All missing archived predictions were explained by the
+original version-exclusion criterion.</p>
+<p>Invalid responses were assigned negative labels in the
+released cache. Strict parsing did not change the labels
+of responses classified as valid by the audit.</p>
+<p>The cause of empty responses has not been established.</p>
+<h2>6. Class-Specific Response Failure</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">project</th>
+<th style="text-align: left;">detector</th>
+<th style="text-align: right;">ASI_invalid_rate</th>
+<th style="text-align: right;">non_ASI_invalid_rate</th>
+<th style="text-align: right;">failure_risk_ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">inkscape</td>
+<td style="text-align: left;">arcade</td>
+<td style="text-align: right;">0.0927</td>
+<td style="text-align: right;">0.0646</td>
+<td style="text-align: right;">1.4357</td>
+</tr>
+<tr>
+<td style="text-align: left;">shepard</td>
+<td style="text-align: left;">arcade</td>
+<td style="text-align: right;">0.4565</td>
+<td style="text-align: right;">0.2184</td>
+<td style="text-align: right;">2.09</td>
+</tr>
+<tr>
+<td style="text-align: left;">shepard</td>
+<td style="text-align: left;">arcan</td>
+<td style="text-align: right;">0.3277</td>
+<td style="text-align: right;">0.2182</td>
+<td style="text-align: right;">1.5021</td>
+</tr>
+<tr>
+<td style="text-align: left;">stackgres</td>
+<td style="text-align: left;">arcade</td>
+<td style="text-align: right;">0.1219</td>
+<td style="text-align: right;">0.0725</td>
+<td style="text-align: right;">1.6802</td>
+</tr>
+<tr>
+<td style="text-align: left;">stackgres</td>
+<td style="text-align: left;">arcan</td>
+<td style="text-align: right;">0.1688</td>
+<td style="text-align: right;">0.0942</td>
+<td style="text-align: right;">1.7922</td>
+</tr>
+</tbody>
+</table>
+<p>The overall observed ASI response failure rate was
+16.90%, compared
+with 8.98%
+for non-ASI records.</p>
+<p>The descriptive failure risk ratio was
+1.8826.</p>
+<p>This is an observational association, not a causal result.
+Records shared between detectors are not independent.</p>
+<h2>7. Error Analysis</h2>
+<ul>
+<li>ASI detected in both SVM runs:
+  612</li>
+<li>ASI missed in both SVM runs:
+  192</li>
+<li>Non-ASI misclassified in both runs:
+  1442</li>
+<li>Configurations showing the accuracy paradox:
+  4 of 5.</li>
+</ul>
+<h2>8. Detector Label Agreement</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">project</th>
+<th style="text-align: right;">shared_issues</th>
+<th style="text-align: right;">agreements</th>
+<th style="text-align: right;">disagreements</th>
+<th style="text-align: right;">agreement_rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">shepard</td>
+<td style="text-align: right;">346</td>
+<td style="text-align: right;">260</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: right;">0.7514</td>
+</tr>
+<tr>
+<td style="text-align: left;">stackgres</td>
+<td style="text-align: right;">1581</td>
+<td style="text-align: right;">1249</td>
+<td style="text-align: right;">332</td>
+<td style="text-align: right;">0.79</td>
+</tr>
+</tbody>
+</table>
+<p>The two detectors disagree on
+418 shared
+issues. Detector-derived labels should therefore be treated
+as operational ground-truth proxies.</p>
+<h2>9. Research Findings</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">finding_id</th>
+<th style="text-align: left;">finding</th>
+<th style="text-align: left;">status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">F01</td>
+<td style="text-align: left;">SVM reproduction at published precision</td>
+<td style="text-align: left;">confirmed</td>
+</tr>
+<tr>
+<td style="text-align: left;">F02</td>
+<td style="text-align: left;">Released GPT-5-mini cache has zero ASI recall</td>
+<td style="text-align: left;">confirmed</td>
+</tr>
+<tr>
+<td style="text-align: left;">F03</td>
+<td style="text-align: left;">Missing predictions explained by version filter</td>
+<td style="text-align: left;">confirmed</td>
+</tr>
+<tr>
+<td style="text-align: left;">F04</td>
+<td style="text-align: left;">Invalid responses silently classified as negative</td>
+<td style="text-align: left;">confirmed</td>
+</tr>
+<tr>
+<td style="text-align: left;">F05</td>
+<td style="text-align: left;">Strict parsing alone does not improve cached F1</td>
+<td style="text-align: left;">confirmed</td>
+</tr>
+<tr>
+<td style="text-align: left;">F06</td>
+<td style="text-align: left;">Invalid responses occur more frequently among ASI records</td>
+<td style="text-align: left;">descriptively_supported</td>
+</tr>
+<tr>
+<td style="text-align: left;">F07</td>
+<td style="text-align: left;">Output token exhaustion explains empty responses</td>
+<td style="text-align: left;">unverified</td>
+</tr>
+<tr>
+<td style="text-align: left;">F08</td>
+<td style="text-align: left;">Prompt engineering improves ASI prediction</td>
+<td style="text-align: left;">pending_phase_2</td>
+</tr>
+<tr>
+<td style="text-align: left;">F09</td>
+<td style="text-align: left;">Retrieval augmentation improves ASI prediction</td>
+<td style="text-align: left;">pending_phase_2</td>
+</tr>
+</tbody>
+</table>
+<h2>10. Threats to Validity</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">id</th>
+<th style="text-align: left;">limitation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">L01</td>
+<td style="text-align: left;">No fresh LLM inference performed.</td>
+</tr>
+<tr>
+<td style="text-align: left;">L02</td>
+<td style="text-align: left;">Published LLM versus cache discrepancy unresolved.</td>
+</tr>
+<tr>
+<td style="text-align: left;">L03</td>
+<td style="text-align: left;">Original embedding input identity not fully verified.</td>
+</tr>
+<tr>
+<td style="text-align: left;">L04</td>
+<td style="text-align: left;">Exact original fold identity not independently verified.</td>
+</tr>
+<tr>
+<td style="text-align: left;">L05</td>
+<td style="text-align: left;">Repeated cross-validation folds are dependent.</td>
+</tr>
+<tr>
+<td style="text-align: left;">L06</td>
+<td style="text-align: left;">Detector-specific records can represent the same issue.</td>
+</tr>
+<tr>
+<td style="text-align: left;">L07</td>
+<td style="text-align: left;">Smell detector labels are imperfect ground-truth proxies.</td>
+</tr>
+<tr>
+<td style="text-align: left;">L08</td>
+<td style="text-align: left;">Random cross-validation does not demonstrate temporal generalization.</td>
+</tr>
+<tr>
+<td style="text-align: left;">L09</td>
+<td style="text-align: left;">Published LLM metric transcription requires source re-verification.</td>
+</tr>
+</tbody>
+</table>
+<p>The strict response parser is a heuristic validity check,
+not independent semantic verification.</p>
+<p>No fresh LLM inference was performed during this phase.</p>
+<h2>11. Proposed Research Extension</h2>
+<p>The proposed investigation evaluates whether reliability
+controls, prompt engineering, retrieval-augmented few-shot
+classification and structured architectural reasoning improve
+early ASI prediction.</p>
+<p>The experiments must isolate the effects of these
+interventions using comparable held-out records.</p>
+<p>Retrieved demonstrations must originate exclusively from
+the permitted training partition.</p>
+<p>Prompt development must not use held-out test labels.
+Because Phase 1 involved exploratory analysis of the
+existing dataset, independent or temporal confirmation is
+desirable for a stronger final generalization claim.</p>
+<h2>12. Proposed Experimental Conditions</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">condition</th>
+<th style="text-align: left;">method</th>
+<th style="text-align: left;">example_selection</th>
+<th style="text-align: left;">purpose</th>
+<th style="text-align: left;">experimental_status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">E0</td>
+<td style="text-align: left;">Archived zero-shot</td>
+<td style="text-align: left;">none</td>
+<td style="text-align: left;">Existing replication artifact</td>
+<td style="text-align: left;">completed</td>
+</tr>
+<tr>
+<td style="text-align: left;">E1</td>
+<td style="text-align: left;">Fresh reliable zero-shot</td>
+<td style="text-align: left;">none</td>
+<td style="text-align: left;">Fresh reference baseline</td>
+<td style="text-align: left;">planned</td>
+</tr>
+<tr>
+<td style="text-align: left;">E2</td>
+<td style="text-align: left;">Enhanced zero-shot prompt</td>
+<td style="text-align: left;">none</td>
+<td style="text-align: left;">Prompt engineering effect</td>
+<td style="text-align: left;">planned</td>
+</tr>
+<tr>
+<td style="text-align: left;">E3</td>
+<td style="text-align: left;">Random few-shot</td>
+<td style="text-align: left;">random</td>
+<td style="text-align: left;">Random example selection control</td>
+<td style="text-align: left;">planned</td>
+</tr>
+<tr>
+<td style="text-align: left;">E4</td>
+<td style="text-align: left;">Retrieval-augmented few-shot</td>
+<td style="text-align: left;">similarity</td>
+<td style="text-align: left;">Similarity-based retrieval effect</td>
+<td style="text-align: left;">planned</td>
+</tr>
+<tr>
+<td style="text-align: left;">E5</td>
+<td style="text-align: left;">Structured architectural reasoning</td>
+<td style="text-align: left;">none</td>
+<td style="text-align: left;">Structured reasoning effect</td>
+<td style="text-align: left;">planned</td>
+</tr>
+<tr>
+<td style="text-align: left;">E6</td>
+<td style="text-align: left;">Proposed hybrid approach</td>
+<td style="text-align: left;">similarity</td>
+<td style="text-align: left;">Combined intervention</td>
+<td style="text-align: left;">planned</td>
+</tr>
+</tbody>
+</table>
+<h2>13. Hypothetical Performance Targets</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">detector</th>
+<th style="text-align: right;">svm_reference_precision</th>
+<th style="text-align: right;">svm_reference_recall</th>
+<th style="text-align: right;">svm_reference_f1</th>
+<th style="text-align: right;">svm_reference_balanced_accuracy</th>
+<th style="text-align: right;">svm_reference_mcc</th>
+<th style="text-align: right;">cached_llm_f1</th>
+<th style="text-align: right;">target_f1_5pct_relative_gain</th>
+<th style="text-align: right;">target_f1_10pct_relative_gain</th>
+<th style="text-align: right;">target_f1_20pct_relative_gain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">arcade</td>
+<td style="text-align: right;">0.2428</td>
+<td style="text-align: right;">0.7098</td>
+<td style="text-align: right;">0.36</td>
+<td style="text-align: right;">0.6774</td>
+<td style="text-align: right;">0.2524</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.378</td>
+<td style="text-align: right;">0.396</td>
+<td style="text-align: right;">0.432</td>
+</tr>
+<tr>
+<td style="text-align: left;">arcan</td>
+<td style="text-align: right;">0.4048</td>
+<td style="text-align: right;">0.7412</td>
+<td style="text-align: right;">0.5058</td>
+<td style="text-align: right;">0.6951</td>
+<td style="text-align: right;">0.3283</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.5311</td>
+<td style="text-align: right;">0.5564</td>
+<td style="text-align: right;">0.607</td>
+</tr>
+</tbody>
+</table>
+<p>These targets are planning benchmarks and are not
+experimental achievements.</p>
+<h2>14. Scientific Figures</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">figure</th>
+<th style="text-align: left;">title</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">fig01_dataset_distribution</td>
+<td style="text-align: left;">Dataset class distribution</td>
+</tr>
+<tr>
+<td style="text-align: left;">fig02_asi_prevalence</td>
+<td style="text-align: left;">Architectural smell-inducing record prevalence</td>
+</tr>
+<tr>
+<td style="text-align: left;">fig03_matched_baseline_comparison</td>
+<td style="text-align: left;">Matched SVM versus cached GPT-5-mini</td>
+</tr>
+<tr>
+<td style="text-align: left;">fig04_svm_performance</td>
+<td style="text-align: left;">SVM precision, recall and F1-score</td>
+</tr>
+<tr>
+<td style="text-align: left;">fig05_accuracy_paradox</td>
+<td style="text-align: left;">Accuracy paradox</td>
+</tr>
+<tr>
+<td style="text-align: left;">fig06_response_reliability</td>
+<td style="text-align: left;">End-to-end LLM response reliability</td>
+</tr>
+<tr>
+<td style="text-align: left;">fig07_class_specific_failure</td>
+<td style="text-align: left;">Class-specific LLM response failure</td>
+</tr>
+<tr>
+<td style="text-align: left;">fig08_confusion_matrices</td>
+<td style="text-align: left;">Matched confusion matrices using one CV run</td>
+</tr>
+<tr>
+<td style="text-align: left;">fig09_cv_distribution</td>
+<td style="text-align: left;">Descriptive cross-validation F1 distributions</td>
+</tr>
+<tr>
+<td style="text-align: left;">fig10_error_stability</td>
+<td style="text-align: left;">ASI error stability across CV runs</td>
+</tr>
+<tr>
+<td style="text-align: left;">fig11_text_length_analysis</td>
+<td style="text-align: left;">Text length, classification error and response coverage</td>
+</tr>
+<tr>
+<td style="text-align: left;">fig12_detector_agreement</td>
+<td style="text-align: left;">Cross-detector label agreement</td>
+</tr>
+<tr>
+<td style="text-align: left;">fig13_published_vs_reproduced</td>
+<td style="text-align: left;">Published versus reproduced SVM performance</td>
+</tr>
+<tr>
+<td style="text-align: left;">fig14_phase2_targets</td>
+<td style="text-align: left;">Hypothetical Phase 2 performance targets</td>
+</tr>
+</tbody>
+</table>
+<h2>15. Conclusion</h2>
+<p>Phase 1 establishes a numerically reproduced SVM baseline
+and documents limitations in the released LLM predictions.</p>
+<p>The archived response failure patterns motivate a controlled
+investigation of reliable LLM inference and enhanced
+classification methods.</p>
+<p>Whether these methods improve ASI prediction remains an
+open experimental question.</p>
+<h2>Replication Artifact</h2>
+<p>https://zenodo.org/doi/10.5281/zenodo.18891082</p>
+<p>The original publication's LLM metric transcription and
+the discrepancy with the released prediction cache remain
+subject to source verification.</p>
+</body>
+</html>

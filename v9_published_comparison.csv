@@ -1,0 +1,3 @@
+detector,published_precision,published_recall,published_f1,original_cache_accuracy,original_cache_precision,original_cache_recall,original_cache_f1,current_labels_accuracy,current_labels_precision,current_labels_recall,current_labels_f1,cv_accuracy,cv_precision,cv_recall,cv_f1,original_cache_f1_difference,cv_f1_difference
+arcade,0.188,0.022,0.066,0.8583831580133472,0.0,0.0,0.0,0.8583831580133472,0.0,0.0,0.0,0.8583848861641373,0.0,0.0,0.0,-0.066,-0.066
+arcan,0.553,0.027,0.052,0.7486107599381936,0.0,0.0,0.0,0.7486107599381936,0.0,0.0,0.0,0.7485991431644352,0.0,0.0,0.0,-0.052,-0.052
